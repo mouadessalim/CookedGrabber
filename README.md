@@ -6,4 +6,6 @@ Github project link : https://github.com/h4x0r-project/CookedGrabber
 
 Devs: Lemon (https://github.com/mouadessalim) ; crashixx (https://github.com/crashixx) 
 
-Only for educational purposes
+Features: Discord Token grabber (steal token, payment informations..) , Instagram token grabber , Twitter token grabber , doxer (ip, location)
+
+Disclaimer: Only for educational purposes
