@@ -34,7 +34,7 @@ There is 2 ways to run the script.
 
 You need to add your **webhook(s)** **link(s)** to the script from this line:
 ```py
-main(['YOUR DISCORD WEBHOOK URL]) #line 252
+main(['YOUR DISCORD WEBHOOK URL']) #line 273
 ```
 *You can run the script normaly.*
 
