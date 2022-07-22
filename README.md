@@ -2,7 +2,7 @@
 
 # Cooked Grabber
 
-Discord , Twitter, Instagram cookies and token grabber
+Discord , Twitter, Instagram cookies and token grabber.
 
 ## Features
 
@@ -16,9 +16,9 @@ Discord , Twitter, Instagram cookies and token grabber
 - Can be converted to exe
 ## Requirements
 
-- Windows OS only
-- Python 3.x (unless it exe converted)
-- Modules: `$ pip install -r requirements.txt` (unless it exe converted)
+- **Windows 10** OS only (*win32, for x86, x86_64, and arm64 architectures*)
+- **Python 3.x** (*unless it exe converted, python 3.9 used for the project.*)
+- **Modules:** `$ pip install -r requirements.txt` (unless it exe converted)
 
 ## Screenshots
 
@@ -52,8 +52,8 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 - History stealer
 - More error bypass
 ## Disclaimer
-- Only for educationnal puposes
-- We decline any responsability in case of misuse of this code
+- Only for educationnal puposes.
+- We decline any responsability in case of misuse of this code.
 
 ## Author
 
