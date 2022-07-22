@@ -38,6 +38,9 @@ Run CookedGrabber.py with your webhook (better if converted to exe) on the targe
 ```
 ## Coming soon features 
 - More optimisations , kill lags
+- Saved password stealer
+- Bookmarks stealer
+- History stealer
 - More error bypass
 ## Disclaimer
 - Only for educationnal puposes
