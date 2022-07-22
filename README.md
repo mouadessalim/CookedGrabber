@@ -46,5 +46,5 @@ Run CookedGrabber.py with your webhook (better if converted to exe) on the targe
 
 ## Author
 
-- [@crashixx](https://github.com/crashixx)
 - [@mouadessalim](https://github.com/mouadessalim)
+- [@crashixx](https://github.com/crashixx)
