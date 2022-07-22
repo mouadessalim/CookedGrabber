@@ -53,7 +53,7 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 - More error bypass
 ## Disclaimer
 - Only for educationnal puposes
-- I decline any responsability in case of misuse of this code
+- We decline any responsability in case of misuse of this code
 
 ## Author
 
