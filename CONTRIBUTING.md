@@ -17,16 +17,11 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 - [I Want To Contribute](#i-want-to-contribute)
 - [Reporting Bugs](#reporting-bugs)
 - [Suggesting Enhancements](#suggesting-enhancements)
-- [Your First Code Contribution](#your-first-code-contribution)
-- [Improving The Documentation](#improving-the-documentation)
-- [Styleguides](#styleguides)
-- [Commit Messages](#commit-messages)
-- [Join The Project Team](#join-the-project-team)
 
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[Cooked-Grabber Code of Conduct](https://github.com/h4x0r-project/CookedGrabberblob/master/CODE_OF_CONDUCT.md).
+[Cooked-Grabber Code of Conduct](https://github.com/h4x0r-project/CookedGrabber/blob/main/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior [here](https://mouadessalim.xyz/#contact).
 
 ## I Have a Question
