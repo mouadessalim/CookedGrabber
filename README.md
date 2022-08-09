@@ -25,7 +25,7 @@ Discord , Twitter, Instagram cookies and token grabber.
 
 ## Screenshots
 
-![App Screenshot](https://imgur.com/btX4Sro.png)
+![App Screenshot](https://imgur.com/zMODaIm.png)
 
 ![App Screenshot](https://imgur.com/Fax7uTB.png)
 
