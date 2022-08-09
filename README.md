@@ -50,7 +50,6 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 
 ## Coming soon features 
 - Saved password stealer
-
 - More error bypass
 ## Disclaimer
 - Only for educationnal puposes.
