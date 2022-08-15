@@ -9,7 +9,6 @@ Discord , Twitter, Instagram cookies and token grabber.
 - Easy to use
 - Alls navigators compatibility
 - Browser history stealer
-- Browser bookmarks stealer
 - Take screenshot 
 - Steal discord token
 - Steal discord payment informations
