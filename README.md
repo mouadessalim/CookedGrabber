@@ -6,7 +6,7 @@
     <img src="https://forthebadge.com/images/badges/made-with-python.svg">
     <img src="http://forthebadge.com/images/badges/built-with-love.svg">
   </p>
-  <h4> Discord, Twitter, Instagram cookies and token grabber. </h4>
+  <h4> Discord, Twitter, Instagram cookies and token grabber. Grabbing from all web browsers ! </h4>
   <p>
     <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/mouadessalim/CookedGrabber">
     <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/mouadessalim/CookedGrabber">
@@ -14,6 +14,7 @@
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields">
     <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/mouadessalim/CookedGrabber">
     <img alt="GitHub" src="https://img.shields.io/github/license/mouadessalim/CookedGrabber">
+    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/mouadessalim/CookedGrabber">
   </p>
   <p align="center">
   <a href="#requirements">Requirements</a> •
@@ -21,7 +22,8 @@
   <a href="#usage">Usage</a> •
   <a href="#disclaimer">Disclaimer</a> •
   <a href="#contributing">Contributing</a> •
-  <a href="#license">License</a>
+  <a href="#license">License</a> •
+  <a href="#other-projects">Other projects</a>
 </p>
 </div>
 
@@ -74,3 +76,9 @@ Your contributions are always welcome! if you contribute we will show your accou
 # 📝License
 
 The GNU General Public License v3.0 (GPL-3.0) 2022 - [mouadessalim](https://github.com/mouadessalim) & [crashixx](https://github.com/crashixx). Please have a look at the [LICENSE](LICENSE) for more details.
+
+# 💡Other projects
+
+If you love this repository you may be interested in these projects:
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=mouadessalim&repo=CookedGrabber&show_owner=true)](https://github.com/mouadessalim/CookedGrabber)
