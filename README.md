@@ -81,4 +81,4 @@ The GNU General Public License v3.0 (GPL-3.0) 2022 - [mouadessalim](https://gith
 
 If you love this repository you may be interested in these projects:
 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=mouadessalim&repo=CookedGrabber&show_owner=true)](https://github.com/mouadessalim/CookedGrabber)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=9P9&repo=Discord-QR-Token-Logger&show_owner=true)](https://github.com/9P9/Discord-QR-Token-Logger)
