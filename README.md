@@ -15,6 +15,7 @@
     <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/mouadessalim/CookedGrabber">
     <img alt="GitHub" src="https://img.shields.io/github/license/mouadessalim/CookedGrabber">
     <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/mouadessalim/CookedGrabber">
+    <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2022">
   </p>
   <p align="center">
   <a href="#requirements">Requirements</a> •
@@ -26,7 +27,6 @@
   <a href="#other-projects">Other projects</a>
 </p>
 </div>
-
 
 # ⚡Requirements
 
@@ -63,7 +63,7 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 
 Your contributions are always welcome! if you contribute we will show your account in the README file ! Please have a look at the [contribution guidelines](CONTRIBUTING.md) first. 🎉
 
-## Contributors ❤
+## Authors ❤
 
 <a href="https://github.com/mouadessalim/CookedGrabber/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=mouadessalim/CookedGrabber" />
