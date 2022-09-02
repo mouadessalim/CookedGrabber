@@ -9,7 +9,6 @@
   <h4> Discord, Twitter, Instagram cookies and token grabber. Grabbing from all web browsers ! </h4>
   <p>
     <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/mouadessalim/CookedGrabber">
-    <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/mouadessalim/CookedGrabber">
     <img alt="GitHub issues" src="https://img.shields.io/github/issues/mouadessalim/CookedGrabber">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields">
     <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/mouadessalim/CookedGrabber">
@@ -18,14 +17,24 @@
     <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2022">
   </p>
   <p align="center">
-  <a href="#requirements">Requirements</a> •
-  <a href="#screenshots">Screenshots</a> •
-  <a href="#usage">Usage</a> •
-  <a href="#disclaimer">Disclaimer</a> •
-  <a href="#contributing">Contributing</a> •
-  <a href="#license">License</a> •
-  <a href="#other-projects">Other projects</a>
-</p>
+    <a href="#requirements">Requirements</a> •
+    <a href="#screenshots">Screenshots</a> •
+    <a href="#usage">Usage</a> •
+    <a href="#disclaimer">Disclaimer</a> •
+    <a href="#contributing">Contributing</a> •
+    <a href="#license">License</a> •
+    <a href="#other-projects">Other projects</a>
+  </p>
+  <p align="center">
+    <i>Loved the tool? Please consider <strong>donating</strong> 💸 to help it improve!</i>
+  </p>
+
+  <p align="center">
+    <a href='https://ko-fi.com/mouadessalim' target='_blank'><img height='23' width="100" src='https://cdn.ko-fi.com/cdn/kofi3.png?v=2' alt='Buy Coffee for mouadessalim' />
+    </a>
+    <a href="https://www.buymeacoffee.com/mouadessalim" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="23" width="100" style="border-radius:1px" />
+    </a>
+  </p>
 </div>
 
 # ⚡Requirements
