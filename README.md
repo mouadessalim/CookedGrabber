@@ -45,7 +45,7 @@
 
 # 📷Screenshots
 
-![App Screenshot](https://imgur.com/zMODaIm.png)
+![image](https://user-images.githubusercontent.com/38190847/188172516-da111666-ff8e-4cdb-86c4-1cbd82f87e91.png)
 
 # 📈Usage
 
