@@ -2,37 +2,49 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+# Prerequisites
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Please answer the following questions for yourself before submitting an issue. **YOU MAY DELETE THE PREREQUISITES SECTION.**
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+- [ ] I am running the latest version
+- [ ] I checked the documentation and found no answer
+- [ ] I checked to make sure that this issue has not already been filed
+- [ ] I'm reporting the issue to the correct repository (for multi-repository projects)
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+# Expected Behavior
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+Please describe the behavior you are expecting
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+# Current Behavior
 
-**Additional context**
-Add any other context about the problem here.
+What is the current behavior?
+
+# Failure Information (for bugs)
+
+Please help provide information about the failure if this is a bug. If it is not a bug, please remove the rest of this template.
+
+## Steps to Reproduce
+
+Please provide detailed steps for reproducing the issue.
+
+1. step 1
+2. step 2
+3. you get it...
+
+## Context
+
+Please provide any relevant information about your setup. This is important in case the issue is not reproducible except for under certain conditions.
+
+* Firmware Version:
+* Operating System:
+* SDK version:
+* Toolchain version:
+
+## Failure Logs
+
+Please include any relevant log snippets or files here.
