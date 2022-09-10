@@ -9,3 +9,5 @@ pycountry==22.3.5
 pycryptodome==3.15.0
 pywin32==304
 requests==2.28.1
+pyautogui==0.9.53
+Pillow==9.2.0

