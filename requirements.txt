@@ -10,4 +10,4 @@ pycryptodome==3.15.0
 pywin32==304
 requests==2.28.1
 pyautogui==0.9.53
-pillow==8.4.0
+Pillow==9.2.0
