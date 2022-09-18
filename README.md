@@ -66,29 +66,15 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 ```
 # 🌐Compatibility
 
-## Cookies and token grabber 🔍
-
-| Browsers           | Supported ? |
-| -----------        | ----------- |
-| Chrome             | ✅ |
-| Edge               | ✅ |
-| Brave              | ✅ |
-| Firefox            | ✅ |
-| Opera (GX)         | ✅ |
-| Vivaldi            | ✅ |
-| Chromium navigator | ✅ |
-
-## Password stealer 💥
-
-| Browsers           | Supported ? |
-| -----------        | ----------- |
-| Chrome             | ✅ |
-| Edge               | ❌ |
-| Brave              | ❌ |
-| Firefox            | ❌ |
-| Opera (GX)         | ❌ |
-| Vivaldi            | ❌ |
-| Chromium navigator | ❌ |
+| Browsers           | Cookies and token grabber 🔍 | Password stealer 💥 | 
+| :-----------:      | :-----------: | :-----------: |
+| Chrome             | ✅ | ✅ |
+| Edge               | ✅ | ❌ |
+| Brave              | ✅ | ❌ |
+| Firefox            | ✅ | ❌ |
+| Opera (GX)         | ✅ | ❌ |
+| Vivaldi            | ✅ | ❌ |
+| Chromium navigator | ✅ | ❌ |
 
 # ❗Disclaimer
 
