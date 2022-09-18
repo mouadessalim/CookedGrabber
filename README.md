@@ -20,7 +20,7 @@
     <a href="#requirements">Requirements</a> •
     <a href="#screenshots">Screenshots</a> •
     <a href="#usage">Usage</a> •
-    <a href="#support">Support</a> •
+    <a href="%EF%B8%8Fsupport">Support</a> •
     <a href="#disclaimer">Disclaimer</a> •
     <a href="#contributing">Contributing</a> •
     <a href="#license">License</a> •
