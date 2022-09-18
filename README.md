@@ -20,10 +20,11 @@
     <a href="#requirements">Requirements</a> •
     <a href="#screenshots">Screenshots</a> •
     <a href="#usage">Usage</a> •
+    <a href="#support">Support</a> •
     <a href="#disclaimer">Disclaimer</a> •
     <a href="#contributing">Contributing</a> •
     <a href="#license">License</a> •
-    <a href="#other-projects">Other projects</a>
+    <a href="#other-projects">Other projects</a> 
   </p>
   <p align="center">
     <i>Loved the tool? Please consider <strong>donating</strong> 💸 to help it improve!</i>
@@ -69,19 +70,19 @@ py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 
 | Browsers           | Supported ? |
 | -----------        | ----------- |
-| Chrome             | ✔ |
-| Edge               | ✔ |
-| Brave              | ✔ |
-| Firefox            | ✔ |
-| Opera (GX)         | ✔ |
-| Vivaldi            | ✔ |
-| Chromium navigator | ✔ |
+| Chrome             | ✅ |
+| Edge               | ✅ |
+| Brave              | ✅ |
+| Firefox            | ✅ |
+| Opera (GX)         | ✅ |
+| Vivaldi            | ✅ |
+| Chromium navigator | ✅ |
 
 ## Password stealer 💥
 
 | Browsers           | Supported ? |
 | -----------        | ----------- |
-| Chrome             | ✔  |
+| Chrome             | ✅ |
 | Edge               | ❌ |
 | Brave              | ❌ |
 | Firefox            | ❌ |
