@@ -85,13 +85,13 @@ Since the data in cookies doesn't change, cookies themselves aren't harmful. The
 
 The server only sends the cookie when it wants the web browser to save it. If you’re wondering “where are cookies stored,” it’s simple: your web browser will store it **locally** to remember the “name-value pair” that identifies you.
 
-**⚠ When you try to connect to an account using cookies it does not even generate a new login request to the server, that mean that the victim does not even receive the email with new connexion. The target don't know that you are connected to the account because the server think it's him !**
+**⚠ When you try to connect to an account using cookies it does not even generate a new login request to the server, that mean that the victim does not even receive the email with a `new connexion detected`. The target don't know that you are connected to the account because the server think it's him !**
 
-*****☢ This reveals major security breaches in general wesbites and social networks ! ☢*****
+*****☢ This reveals major security breaches in general websites and social networks ! ☢*****
 
 ## How to bypass websites with cookies ?
 
-So to use cookies to connect to the victim account, you must have a cookies extension. I recommand [Cookie-Editor](https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm). **To bypass website security you must be already connected to your personnal account to generate all cookies needed for the website.** After being sure that all default cookies have been generated use your cookies extension to replace your personnal id account cookies with the grabbed victim account cookies.
+So to use cookies to log into the victim account, you must have a cookies extension. I recommand [Cookie-Editor](https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm). **To bypass website security you must be already connected to your personnal account to generate all cookies needed for the website.** After being sure that all default cookies have been generated use your cookies extension to replace your personnal id account cookies with the grabbed victim account cookies.
 
 #### *****Example: Instagram*****
 
@@ -101,8 +101,7 @@ You need to put each value in it's place with the cookies extension:
 
 ![image](https://user-images.githubusercontent.com/38190847/191097359-a77d7509-c485-4c85-80d5-42ab43b4bd0e.png)
 
-Once the cookies replaced, refresh the page and you are logged in the victim account !
-
+> Once the cookies replaced, refresh the page and you are logged in the victim account !
 
 # 🌐Compatibility
 
