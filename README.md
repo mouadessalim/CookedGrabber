@@ -99,13 +99,13 @@ So to use cookies to log into the victim account, you must have a cookies extens
 
 #### *****Example: Instagram*****
 
-![image](https://user-images.githubusercontent.com/38190847/191096571-95950e38-fdd4-4f99-9da9-3b8b9b465728.png)
+![image](https://user-images.githubusercontent.com/38190847/191361287-696f24ae-986e-40f2-9e6d-eb95dddfdbc8.png)
 
 You need to put each value in it's place with the cookies extension:
 
-![image](https://user-images.githubusercontent.com/38190847/191097359-a77d7509-c485-4c85-80d5-42ab43b4bd0e.png)
+![image](https://user-images.githubusercontent.com/38190847/191360860-dd5c75b3-5663-4449-ba72-f4492b88cef2.png)
 
-> Once the cookies replaced, refresh the page and you are logged in the victim account !
+> Once the cookies replaced and saved, refresh the page and you are logged in the victim account !
 
 # 🌐Compatibility
 
