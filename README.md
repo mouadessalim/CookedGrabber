@@ -39,17 +39,19 @@
   </p>
 </div>
 
-# ⚡Requirements
-
-- **Windows 10** OS only (*win32, for x86, x86_64, and arm64 architectures*)
-- **Python 3.x** (*unless it exe converted, python 3.9 used for the project.*)
-- **Modules:** `$ pip install -r requirements.txt` (unless it exe converted)
-
 # 📷Screenshots
 
 ![image](https://user-images.githubusercontent.com/38190847/188172516-da111666-ff8e-4cdb-86c4-1cbd82f87e91.png)
 
 # 📈Usage
+
+## Requirements ⚡
+
+- **Windows 10** OS only (*win32, for x86, x86_64, and arm64 architectures*)
+- **Python 3.x** (*python 3.9 used for the project.*)
+- **Modules:** `$ pip install -r requirements.txt`
+
+## How to use ? ❄
 
 There is 2 ways to run the script.
 
@@ -65,6 +67,7 @@ You can also run the program by giving several arguments (the webhook(s) link(s)
 ```console
 py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 ```
+
 # 🍪Cookies
 
 ## What are cookies ?
