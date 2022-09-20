@@ -17,8 +17,6 @@
     <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2022">
   </p>
   <p align="center">
-    <a href="#requirements">Requirements</a> •
-    <a href="#screenshots">Screenshots</a> •
     <a href="#usage">Usage</a> •
     <a href="#cookies">Cookies</a> •
     <a href="#compatibility">Compatibility</a> •
@@ -38,10 +36,6 @@
     </a>
   </p>
 </div>
-
-# 📷Screenshots
-
-![image](https://user-images.githubusercontent.com/38190847/188172516-da111666-ff8e-4cdb-86c4-1cbd82f87e91.png)
 
 # 📈Usage
 
@@ -67,6 +61,13 @@ You can also run the program by giving several arguments (the webhook(s) link(s)
 ```console
 py CookedGrabber.py YOUR WEBHOOK(s) URL(s)
 ```
+
+## Screenshots 📷
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/38190847/188172516-da111666-ff8e-4cdb-86c4-1cbd82f87e91.png">
+  <img src="https://user-images.githubusercontent.com/38190847/191291652-e617410c-62e8-489b-b8df-e738a9ed40c4.png">
+</p>
 
 # 🍪Cookies
 
