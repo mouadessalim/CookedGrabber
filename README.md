@@ -12,7 +12,6 @@
     <img alt="GitHub issues" src="https://img.shields.io/github/issues/mouadessalim/CookedGrabber">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields">
     <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/mouadessalim/CookedGrabber">
-    <img alt="GitHub" src="https://img.shields.io/github/license/mouadessalim/CookedGrabber">
     <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/mouadessalim/CookedGrabber">
     <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2022">
   </p>
