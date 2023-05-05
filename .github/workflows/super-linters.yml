@@ -1,0 +1,2 @@
+- name: Super-Linter
+  uses: super-linter/super-linter@v5.0.0
