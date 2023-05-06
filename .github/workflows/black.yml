@@ -23,7 +23,7 @@ jobs:
       - name: Run Black formatter check
         run: black --check .
       - name: Apply Black formatting changes
-        run: black --write .
+        run: black .
       - name: Commit formatting changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
