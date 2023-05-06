@@ -22,3 +22,9 @@ jobs:
         run: python -m pip install --upgrade pip && pip install black
       - name: Run Black formatter check
         run: black --check .
+      - name: Apply Black formatting changes
+        run: black --write .
+      - name: Commit formatting changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply Black formatting changes
