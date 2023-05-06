@@ -28,7 +28,10 @@ from tempfile import TemporaryDirectory
 from pyautogui import screenshot
 from random import choices
 from string import ascii_letters, digits
+
 website = ["discord.com", "twitter.com", "instagram.com", "netflix.com"]
+
+
 def get_screenshot(path):
     get_screenshot.scrn = screenshot()
     get_screenshot.scrn_path = os.path.join(
