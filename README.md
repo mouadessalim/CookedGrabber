@@ -2,6 +2,10 @@
   <img src="https://imgur.com/lCyX6TX.png">
   <br>
   <br>
+  <p>
+    <img src="https://forthebadge.com/images/badges/made-with-python.svg">
+    <img src="http://forthebadge.com/images/badges/built-with-love.svg">
+  </p>
   <h4> Discord, Twitter, Instagram, netflix cookies, token grabber and also password grabber. Grabbing from all web browsers ! </h4>
   <p>
     <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/mouadessalim/CookedGrabber">
