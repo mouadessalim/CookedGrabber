@@ -91,7 +91,7 @@ Since the data in cookies doesn't change, cookies themselves aren't harmful. The
 
 The server only sends the cookie when it wants the web browser to save it. If you’re wondering “where are cookies stored,” it’s simple: your web browser will store it **locally** to remember the “name-value pair” that identifies you.
 
-**⚠ When you try to connect to an account using cookies it does not even generate a new login request to the server, that mean that the victim does not even receive the email with a `new connexion detected`. The target don't know that you are connected to the account because the server think it's him !**
+**⚠ When attempting to connect to an account using cookies, the system does not generate a new login request to the server. As a result, `the account owner does not receive an email notification` regarding a new login attempt. The server mistakenly assumes that the activity is coming from the legitimate account holder, leaving the owner unaware of any unauthorized access. !**
 
 *****☢ This reveals major security breaches in general websites and social networks ! ☢*****
 
@@ -145,9 +145,3 @@ Your contributions are always welcome! if you contribute we will show your accou
 The actual repository is _unlicensed_, it mean **all rights are reserved**. You cannot modify or redistribute this code without **explicit** permission from the copyright [holders](https://github.com/mouadessalim/CookedGrabber/graphs/contributors). 
 
 _Violating this rule may lead our intervention according to the [Github Terms of Service — User-Generated Content — Section D.3](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#3-ownership-of-content-right-to-post-and-license-grants) using the [Content Removal Policies — DMCA Takedown Policy](https://docs.github.com/en/site-policy/content-removal-policies/dmca-takedown-policy#what-is-the-dmca)_.
-
-# 💡Other projects
-
-If you love this repository you may be interested in these projects:
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=9P9&repo=Discord-QR-Token-Logger&show_owner=true)](https://github.com/9P9/Discord-QR-Token-Logger)
